@@ -1,16 +1,14 @@
 import React from 'react';
 import { Button } from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
+import { BUTTON_TEXT } from '../../constants';
+import './Header.css';
 
 export const Header: React.FC = () => {
   return (
-    <header>
-      <div>
+    <header className="header">
         <Logo/>
-      </div>
-      <div>
-        <Button buttonText="LOGIN" onClick={() => {}} type="button" className="button" />
-      </div>
+        <Button buttonText={BUTTON_TEXT.LOGIN} onClick={() => {}} type="button" className="main-button login-button" />
     </header>
   );
 };

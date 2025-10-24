@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+/* CSS Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body {
+    height: 100%;
+  }
+  
+  body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+  
+  input, button, textarea, select {
+    font: inherit;
+  }
+  
+  p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+  }
+  
+  #root, #__next {
+    isolation: isolate;
+  }
+
+  /* variables */
+
+:root {
+    --color-white: #ffffff;
+    --primary-blue: #007298;
+    --primary-text: #333E48;
+    --color-main-container-background: #F7F7F7;
+    --font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-size-main: 16px;
+    --line-height-main: 1.5;
+    --line-height-small: 1.25;
+    --font-weight-bold: 700;
+    --font-weight-regular: 400;
+    --container-width: 1440px;
+    --shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+    
+    
+  }

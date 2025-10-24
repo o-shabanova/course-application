@@ -7,5 +7,6 @@ export const BUTTON_TEXT = {
     CREATE_AUTHOR: 'CREATE AUTHOR',
     CREATE_COURSE: 'CREATE COURSE',
     CANCEL: 'CANCEL',
-    BACK: 'BACK'
-  } as const;
+    BACK: 'BACK',
+    EMPTY: ''
+} as const;

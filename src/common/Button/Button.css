@@ -1,0 +1,15 @@
+.main-button {
+    color: var(--color-white);
+    background-color: var(--primary-blue);
+    border: none;
+    padding: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: var(--font-size-main);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-main);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
