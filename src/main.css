@@ -55,3 +55,10 @@
     
     
   }
+
+  body {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    background-color: var(--color-main-container-background);
+    font-family: var(--font-family);
+  }

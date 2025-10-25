@@ -8,7 +8,7 @@ export const Header: React.FC = () => {
   return (
     <header className="header">
         <Logo/>
-        <Button buttonText={BUTTON_TEXT.LOGOUT} onClick={() => {}} type="button" className="main-button login-button" />
+        <Button buttonText={BUTTON_TEXT.LOGOUT} type="button" className="main-button login-button" />
     </header>
   );
 };

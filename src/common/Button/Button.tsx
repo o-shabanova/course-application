@@ -3,7 +3,6 @@ import './Button.css';
 
 interface ButtonProps {
   buttonText: string;
-  onClick: () => void;
   type: 'button' | 'submit' | 'reset';
   className: string;
 
@@ -11,14 +10,12 @@ interface ButtonProps {
 
 export const Button: React.FC<ButtonProps> = ({ 
     buttonText, 
-    onClick, 
     type, 
     className
 
 }) => {
   return (
   <button 
-  onClick={onClick}
   type={type}
   className={className}
   >

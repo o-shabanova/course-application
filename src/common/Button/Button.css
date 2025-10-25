@@ -6,7 +6,6 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: var(--font-size-main);
-    font-family: var(--font-family);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-main);
     text-align: center;
