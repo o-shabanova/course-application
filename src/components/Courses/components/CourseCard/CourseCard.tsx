@@ -3,6 +3,7 @@ import React from 'react';
 import './CourseCard.css';
 import Button from '../../../../common/Button/Button';
 import { BUTTON_TEXT } from '../../../../constants';
+import { formatCreationDate } from '../../../../helpers/formatCreationDate';
 
 interface CourseCardProps {
     course: {
@@ -17,6 +18,7 @@ interface CourseCardProps {
   }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames }) => {
+    const formattedCreationDate = formatCreationDate(course.creationDate);
   return (
     <>
         <article className="course-card">
@@ -26,7 +28,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames }) => {
             <div className="course-card-info">
                 <p className="course-card-authors"><span className="course-card-info-label">Authors:</span> {authorNames?.join(', ')}</p>
                 <p className="course-card-duration"><span className="course-card-info-label">Duration:</span> {course.duration} hours</p>
-                <p className="course-card-creation-date"><span className="course-card-info-label">Created:</span> {course.creationDate}</p>
+                <p className="course-card-creation-date"><span className="course-card-info-label">Created:</span> {formattedCreationDate}</p>
                 <Button buttonText={BUTTON_TEXT.SHOW_COURSE} type="button" className="main-button" />
             </div>
         </article>
