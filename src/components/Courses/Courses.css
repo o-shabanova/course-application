@@ -3,3 +3,12 @@
     width: 78%;
     margin: 0 auto;
 }
+
+.courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.add-new-course-button {
+    padding: 13px 19.5px;
+}
