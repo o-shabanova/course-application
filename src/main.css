@@ -40,6 +40,7 @@
 
 :root {
     --color-white: #ffffff;
+    --color-black: #000000;
     --primary-blue: #007298;
     --primary-text: #333E48;
     --color-main-container-background: #F7F7F7;
@@ -47,10 +48,12 @@
     --font-size-main: 16px;
     --line-height-main: 1.5;
     --line-height-small: 1.25;
+    --line-height-title: 1.6;
     --font-weight-bold: 700;
     --font-weight-regular: 400;
     --container-width: 1440px;
-    --shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    --shadow-header: 1px 1px 4px 0 rgba(0, 0, 0, 0.15);
+    --shadow-card: 2px 0 8px 0 rgba(0, 0, 0, 0.25);
 
     
     
@@ -61,4 +64,7 @@
     margin: 0 auto;
     background-color: var(--color-main-container-background);
     font-family: var(--font-family);
+    color: var(--primary-text);
+    line-height: var(--line-height-small);
+    font-size: var(--font-size-main);
   }

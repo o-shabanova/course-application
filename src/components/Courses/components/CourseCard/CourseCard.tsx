@@ -26,12 +26,18 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames }) => {
         <article className="course-card">
             
             <h1 className="course-card-title">{course.title}</h1>
-            <p className="course-card-description">{course.description}</p>
-            <div className="course-card-info">
-                <p className="course-card-authors"><span className="course-card-info-label">Authors:</span> {authorNames?.join(', ')}</p>
-                <p className="course-card-duration"><span className="course-card-info-label">Duration:</span> {formattedCourseDuration}</p>
-                <p className="course-card-creation-date"><span className="course-card-info-label">Created:</span> {formattedCreationDate}</p>
-                <Button buttonText={BUTTON_TEXT.SHOW_COURSE} type="button" className="main-button" />
+            <div className="course-card-content">
+                <p className="course-card-description">{course.description}</p>
+                <div className="course-card-info">
+                    <div className="course-card-info-item">
+                        <p className="course-card-authors"><span className="course-card-info-label">Authors:</span> {authorNames?.join(', ')}</p>
+                        <p className="course-card-duration"><span className="course-card-info-label">Duration:</span> {formattedCourseDuration}</p>
+                        <p className="course-card-creation-date"><span className="course-card-info-label">Created:</span> {formattedCreationDate}</p>
+                    </div>
+                    <div className="course-card-info-item">
+                        <Button buttonText={BUTTON_TEXT.SHOW_COURSE} type="button" className="main-button course-card-button" />
+                    </div>
+                </div>
             </div>
         </article>
     </>
