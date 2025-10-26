@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '../../common/Button/Button';
 import { BUTTON_TEXT, mockedAuthorsList } from '../../constants';
-import { formatCreationDate } from '../../helpers/formatCreationDate';
-import { getCourseDuration } from '../../helpers/getCourseDuration';
-import { getAuthorsNames, Author } from '../../helpers/getAuthorsNames';
+import formatCreationDate from '../../helpers/formatCreationDate';
+import getCourseDuration from '../../helpers/getCourseDuration';
+import getAuthorsNames, { Author } from '../../helpers/getAuthorsNames';
 import './CourseInfo.css';
 
 interface Course {

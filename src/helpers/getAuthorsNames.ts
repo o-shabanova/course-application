@@ -3,7 +3,7 @@ export interface Author {
   name: string;
 }
 
-export const getAuthorsNames = (authorIds: string[], authorsList: Author[]): string => {
+const getAuthorsNames = (authorIds: string[], authorsList: Author[]): string => {
   if (!authorIds || !Array.isArray(authorIds) || authorIds.length === 0) {
     return 'name 2, name 3';
   }
@@ -14,4 +14,7 @@ export const getAuthorsNames = (authorIds: string[], authorsList: Author[]): str
     
   return names.length > 0 ? names.join(', ') : 'name 2, name 3';
 };
+
+export { getAuthorsNames };
+export default getAuthorsNames;
 

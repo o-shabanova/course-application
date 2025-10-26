@@ -3,8 +3,8 @@ import React from 'react';
 import './CourseCard.css';
 import Button from '../../../../common/Button/Button';
 import { BUTTON_TEXT } from '../../../../constants';
-import { formatCreationDate } from '../../../../helpers/formatCreationDate';
-import { getCourseDuration } from '../../../../helpers/getCourseDuration';
+import formatCreationDate from '../../../../helpers/formatCreationDate';
+import getCourseDuration from '../../../../helpers/getCourseDuration';
 
 interface Course {
   id: string;
