@@ -6,19 +6,33 @@ import { BUTTON_TEXT } from '../../../../constants';
 import { formatCreationDate } from '../../../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
 
-interface CourseCardProps {
-    course: {
-      id: string;
-      title: string;
-      description: string;
-      creationDate: string;
-      duration: number;
-      authors: string[];
-    };
-    authorNames?: string[];
-  }
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  creationDate: string;
+  duration: number;
+  authors: string[];
+}
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames }) => {
+interface CourseCardProps {
+  course: Course;
+  authorNames?: string[];
+}
+
+const defaultCourse: Course = {
+  id: '1',
+  title: 'Course Title',
+  description: 'Course Description',
+  creationDate: '01/01/2025',
+  duration: 60,
+  authors: ['27cc3006-e93a-4748-8ca8-73d06aa93b6d', 'f762978b-61eb-4096-812b-ebde22838167']
+};
+
+const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse, authorNames = [] }) => {
+  if (!course) {
+    return null;
+  }
     const formattedCreationDate = formatCreationDate(course.creationDate);
     const formattedCourseDuration = getCourseDuration(course.duration);
   return (
