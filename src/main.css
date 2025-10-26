@@ -14,11 +14,6 @@
     height: 100%;
   }
   
-  body {
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  
   img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;
@@ -75,6 +70,7 @@
     color: var(--primary-text);
     line-height: var(--line-height-small);
     font-size: var(--font-size-main);
+    -webkit-font-smoothing: antialiased;
   }
 
   .add-new-course-button {

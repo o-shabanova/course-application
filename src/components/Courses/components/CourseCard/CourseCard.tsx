@@ -22,7 +22,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames }) => {
     const formattedCreationDate = formatCreationDate(course.creationDate);
     const formattedCourseDuration = getCourseDuration(course.duration);
   return (
-    <>
         <article className="course-card">
             
             <h1 className="course-card-title">{course.title}</h1>
@@ -40,7 +39,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames }) => {
                 </div>
             </div>
         </article>
-    </>
   );
 };
 
