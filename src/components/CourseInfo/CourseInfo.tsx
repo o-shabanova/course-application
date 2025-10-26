@@ -1,13 +1,10 @@
 import React from 'react';
 import { Button } from '../../common/Button/Button';
-import { BUTTON_TEXT } from '../../constants';
+import { BUTTON_TEXT, mockedAuthorsList } from '../../constants';
 import { formatCreationDate } from '../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
+import { getAuthorsNames, Author } from '../../helpers/getAuthorsNames';
 import './CourseInfo.css';
-interface Author {
-  id: string;
-  name: string;
-}
 
 interface Course {
   id: string;
@@ -22,13 +19,24 @@ interface CourseInfoProps {
   course: Course;
   authors: Author[];
 }
-const CourseInfo:React.FC<CourseInfoProps> = ({course, authors}) => {
+const defaultCourse: Course = {
+  id: '1',
+  title: 'Course 1',
+  description: 'Course 1 description',
+  creationDate: '01/01/2025',
+  duration: 60,
+  authors: ['27cc3006-e93a-4748-8ca8-73d06aa93b6d', 'f762978b-61eb-4096-812b-ebde22838167']
+};
+
+const CourseInfo:React.FC<Partial<CourseInfoProps>> = ({course = defaultCourse, authors = mockedAuthorsList}) => {
+  if (!course || !authors) {
+    return null;
+  }
+  
   const formattedCourseDuration = getCourseDuration(course.duration);
   const formattedCreationDate = formatCreationDate(course.creationDate);
   
-  const authorNames = course.authors.map(authorId => 
-    authors.find(author => author.id === authorId)?.name
-  ).filter(Boolean).join(', ');
+  const authorNames = getAuthorsNames(course.authors, authors);
 
   return (
     <main className="course-info-container">
