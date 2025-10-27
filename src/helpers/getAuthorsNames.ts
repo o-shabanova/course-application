@@ -5,16 +5,15 @@ export interface Author {
 
 const getAuthorsNames = (authorIds: string[], authorsList: Author[]): string => {
   if (!authorIds || !Array.isArray(authorIds) || authorIds.length === 0) {
-    return 'name 2, name 3';
+    return 'name2, name3';
   }
   
   const names = authorIds
     .map(authorId => authorsList.find(author => author.id === authorId)?.name)
     .filter(Boolean);
     
-  return names.length > 0 ? names.join(', ') : 'name 2, name 3';
+  return names.length > 0 ? names.join(', ') : 'name2, name3';
 };
 
-export { getAuthorsNames };
 export default getAuthorsNames;
 

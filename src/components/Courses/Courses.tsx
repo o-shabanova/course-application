@@ -4,6 +4,7 @@ import CourseCard from './components/CourseCard/CourseCard';
 import {BUTTON_TEXT} from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
+import getAuthorsNames from '../../helpers/getAuthorsNames';
 
 interface Author {
     id: string;
@@ -33,7 +34,7 @@ const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
         </div>
         <ul className="courses-list">
             {courses.map((course) => (<li key={course.id} className="course-list-item">
-                <CourseCard key={course.id} course={course} authorNames={authors.filter((author) => course.authors.includes(author.id)).map((author) => author.name)} />
+                <CourseCard key={course.id} course={course} authorNames={getAuthorsNames(course.authors, authors)} />
                 </li>
             ))}
         </ul>

@@ -17,7 +17,7 @@ interface Course {
 
 interface CourseCardProps {
   course: Course;
-  authorNames?: string[];
+  authorNames?: string;
 }
 
 const defaultCourse: Course = {
@@ -29,7 +29,7 @@ const defaultCourse: Course = {
   authors: ['27cc3006-e93a-4748-8ca8-73d06aa93b6d', 'f762978b-61eb-4096-812b-ebde22838167']
 };
 
-const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse, authorNames = [] }) => {
+const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse, authorNames = '' }) => {
   if (!course) {
     return null;
   }
@@ -43,7 +43,7 @@ const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse
                 <p className="course-card-description">{course.description}</p>
                 <div className="course-card-info">
                     <div className="course-card-info-item">
-                        <p className="course-card-authors"><span className="course-card-info-label">Authors:</span> {authorNames?.join(', ')}</p>
+                        <p className="course-card-authors"><span className="course-card-info-label">Authors:</span> {authorNames}</p>
                         <p className="course-card-duration"><span className="course-card-info-label">Duration:</span> {formattedCourseDuration}</p>
                         <p className="course-card-creation-date"><span className="course-card-info-label">Created:</span> {formattedCreationDate}</p>
                     </div>
