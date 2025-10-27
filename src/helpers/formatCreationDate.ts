@@ -1,5 +1,5 @@
 const formatCreationDate = (dateString: string): string => {
-    const [month, day, year] = dateString.split('/');
+    const [day, month, year] = dateString.split('/');
     return `${day}.${month}.${year}`;
 };
 
