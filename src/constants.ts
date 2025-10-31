@@ -8,7 +8,8 @@ export const BUTTON_TEXT = {
     CREATE_COURSE: 'CREATE COURSE',
     CANCEL: 'CANCEL',
     BACK: 'BACK',
-    EMPTY: ''
+    EMPTY: '',
+    REGISTER: 'REGISTER',
 } as const;
 
 export const mockedCoursesList = [
