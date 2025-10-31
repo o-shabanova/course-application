@@ -8,7 +8,7 @@ function App() {
   return (
     <>
     <Header />
-    {(mockedCoursesList.length > 0) ? <Courses courses={mockedCoursesList} authors={mockedAuthorsList} /> : <EmptyCourseList />}
+    {/* {(mockedCoursesList.length > 0) ? <Courses courses={mockedCoursesList} authors={mockedAuthorsList} /> : <EmptyCourseList />} */}
     <Registration title="Registration"  buttonText="Register" onSubmit={() => {}} />
     </>
   );

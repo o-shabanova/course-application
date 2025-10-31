@@ -1,6 +1,6 @@
 import React from 'react'; 
 import './Registration.css';
-import {Input } from '../Input/Input';
+import {Input } from '../../common/Input/Input';
 
 interface RegistrationProps {
     title: string;
