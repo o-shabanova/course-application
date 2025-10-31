@@ -1,5 +1,6 @@
 import React from 'react';
 import { InputHTMLAttributes } from 'react';
+import './Input.css';
 
 interface InputProps {
     labelText: string,
@@ -14,6 +15,6 @@ interface InputProps {
 export const Input: React.FC<InputProps> = ({ labelText, type, placeholderText, value, onChange, required, className }) =>  (
     <div className={className}>
         <label>{labelText}</label>
-        <input type={type} placeholder={placeholderText} value={value} onChange={(e) => onChange(e.target.value)} required={required} />
+        <input className="input" type={type} placeholder={placeholderText} value={value} onChange={(e) => onChange(e.target.value)} required={required} />
     </div>
 );
