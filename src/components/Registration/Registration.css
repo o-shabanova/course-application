@@ -54,4 +54,5 @@
 .registration-link {
     font-weight: var(--font-weight-bold);
     text-decoration:none;
+    cursor: pointer;
 }
