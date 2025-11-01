@@ -27,6 +27,7 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
 
     const inputs = [
         {   id: inputIds.name,
+            name: 'name',
             className: 'registration-input name-input',
             labelClassName: 'registration-label',
             labelText: 'Name',
@@ -34,10 +35,10 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
             placeholderText: 'Enter your name',
             value: values.name,
             required: true,
-            setValue: (value: string) => setValues({...values, name: value})
         },
         {
             id: inputIds.email,
+            name: 'email',
             className: 'registration-input email-input',
             labelClassName: 'registration-label',
             labelText: 'Email',
@@ -45,10 +46,10 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
             placeholderText: 'Enter your email',
             value: values.email,
             required: true,
-            setValue: (value: string) => setValues({...values, email: value})
         },
         {
             id: inputIds.password,
+            name: 'password',
             className: 'registration-input password-input',
             labelClassName: 'registration-label',
             labelText: 'Password',
@@ -56,14 +57,19 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
             placeholderText: 'Enter your password',
             value: values.password,
             required: true,
-            setValue: (value: string) => setValues({...values, password: value})
         }
     ]
 
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log(values);
     }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
+      };
+
     return (
         <>
         <form className="registration-container" onSubmit={handleSubmit}>
@@ -74,6 +80,7 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
                             <Input 
                             key={input.id} 
                             {...input}
+                            onChange={handleChange}
                             />
                         ))}
                     <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" onClick={onSubmit} className="main-button registration-button" />
