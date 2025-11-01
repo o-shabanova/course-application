@@ -5,17 +5,23 @@ import './Input.css';
 interface InputProps {
     labelText: string,
     type: InputHTMLAttributes<HTMLInputElement>['type'],
-    placeholderText: string,
-    value: string,  
-    onChange: (value: string) => void,
+    placeholderText: string,  
+    value: string,
     required: boolean,
     className?: string,
-    labelClassName?: string
+    labelClassName?: string,
+    setValue: (value: string) => void;
 }
 
-export const Input: React.FC<InputProps> = ({ labelText, type, placeholderText, value, onChange, required, className, labelClassName }) =>  (
-    <div className={className}>
-        <label className={labelClassName}>{labelText}</label>
-        <input className="input" type={type} placeholder={placeholderText} value={value} onChange={(e) => onChange(e.target.value)} required={required} />
+export const Input: React.FC<InputProps> = (props) => 
+     (
+    <div className={props.className}>
+        <label className={props.labelClassName}>{props.labelText}</label>
+        <input 
+        className="input" type={props.type} 
+        placeholder={props.placeholderText} 
+        value={props.value}
+        onChange={(e) => props.setValue(e.target.value)} 
+        required={props.required} />
     </div>
 );
