@@ -6,3 +6,17 @@
     line-height: var(--line-height-main);
     font-weight: var(--font-weight-regular);
 }
+
+.error-message {
+    color: var(--error-color);
+    font-size: 14px;
+    padding: 4px;
+    display: none;
+}
+
+.input:invalid[data-focused="true"] {
+    border-color: var(--error-color);
+}
+.input:invalid[data-focused="true"] ~ .error-message {
+    display: block;
+}

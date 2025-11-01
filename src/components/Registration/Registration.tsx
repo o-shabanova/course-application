@@ -34,7 +34,10 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
             type: 'text',
             placeholderText: 'Enter your name',
             value: values.name,
-            required: true,
+            errorMessage: 'Name is required',
+            pattern: "^[A-Za-z0-9]{3,16}$",
+            title: "Name must be between 3 and 16 characters and can only contain letters and numbers",
+            required: true
         },
         {
             id: inputIds.email,
@@ -45,7 +48,10 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
             type: 'email',
             placeholderText: 'Enter your email',
             value: values.email,
-            required: true,
+            errorMessage: 'Email is required',
+            pattern: "^[A-Za-z0-9_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z0-9-]{2,4}$",
+            title: "Please enter a valid email address",
+            required: true
         },
         {
             id: inputIds.password,
@@ -56,7 +62,10 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
             type: 'password',
             placeholderText: 'Enter your password',
             value: values.password,
-            required: true,
+            errorMessage: 'Password is required',
+            pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d!@#$%^&*]{8,}$",
+            title: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
+            required: true
         }
     ]
 
