@@ -26,8 +26,8 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
         {
             id: inputIds.email,
             name: 'email',
-            className: 'login-input email-input',
-            labelClassName: 'login-label',
+            className: 'auth-input email-input',
+            labelClassName: 'auth-label',
             labelText: 'Email',
             type: 'email',
             placeholderText: 'Enter your email',
@@ -40,8 +40,8 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
         {
             id: inputIds.password,
             name: 'password',
-            className: 'login-input password-input',
-            labelClassName: 'login-label',
+            className: 'auth-input password-input',
+            labelClassName: 'auth-label',
             labelText: 'Password',
             type: 'password',
             placeholderText: 'Enter your password',
@@ -66,18 +66,18 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
 
     return (
         <>
-        <form className="login-container" onSubmit={handleSubmit}>
-            <h2 className="login-title">{title}</h2>
-            <fieldset className="login-fieldset">
-                <div className="login-content">
+        <form className="auth-container" onSubmit={handleSubmit}>
+            <h2 className="auth-title">{title}</h2>
+            <fieldset className="auth-fieldset">
+                <div className="auth-content">
                     {inputs.map((input) => (<Input
                     key={input.id}
                     {...input}
                     onChange={handleChange}
                     />
                     ))}
-                    <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button form-login-button" />
-                    <p className="login-paragraph">If you don't have an account you may <span className="login-link" onClick={onNavigateToRegistration}>Registration</span></p>
+                    <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button auth-button" />
+                    <p className="auth-paragraph">If you don't have an account you may <span className="auth-link" onClick={onNavigateToRegistration}>Registration</span></p>
                 </div>
             </fieldset>
         </form>

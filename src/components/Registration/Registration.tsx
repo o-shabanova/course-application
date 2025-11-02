@@ -27,8 +27,8 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
     const inputs = [
         {   id: inputIds.name,
             name: 'name',
-            className: 'registration-input name-input',
-            labelClassName: 'registration-label',
+            className: 'auth-input name-input',
+            labelClassName: 'auth-label',
             labelText: 'Name',
             type: 'text',
             placeholderText: 'Enter your name',
@@ -41,8 +41,8 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
         {
             id: inputIds.email,
             name: 'email',
-            className: 'registration-input email-input',
-            labelClassName: 'registration-label',
+            className: 'auth-input email-input',
+            labelClassName: 'auth-label',
             labelText: 'Email',
             type: 'email',
             placeholderText: 'Enter your email',
@@ -55,8 +55,8 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
         {
             id: inputIds.password,
             name: 'password',
-            className: 'registration-input password-input',
-            labelClassName: 'registration-label',
+            className: 'auth-input password-input',
+            labelClassName: 'auth-label',
             labelText: 'Password',
             type: 'password',
             placeholderText: 'Enter your password',
@@ -80,10 +80,10 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
 
     return (
         <>
-        <form className="registration-container" onSubmit={handleSubmit}>
-        <h2 className="registration-title">{title}</h2>
-            <fieldset className="registration-fieldset">
-                <div className="registration-content">
+        <form className="auth-container" onSubmit={handleSubmit}>
+        <h2 className="auth-title">{title}</h2>
+            <fieldset className="auth-fieldset">
+                <div className="auth-content">
                         {inputs.map((input) => (
                             <Input 
                             key={input.id} 
@@ -91,8 +91,8 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
                             onChange={handleChange}
                             />
                         ))}
-                    <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" className="main-button registration-button" />
-                    <p className="registration-paragraph">If you have an account you may <span className="registration-link" onClick={onNavigateToLogin}>Login</span></p>
+                    <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" className="main-button auth-button" />
+                    <p className="auth-paragraph">If you have an account you may <span className="auth-link" onClick={onNavigateToLogin}>Login</span></p>
                 </div>
             </fieldset>
         </form>
