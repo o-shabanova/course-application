@@ -17,11 +17,12 @@ function App() {
        {currentView === 'registration' ? (
          <Registration 
            title="Registration" 
-           onSubmit={() => {}} 
            onNavigateToLogin={() => setCurrentView('login')}
          />
        ) : (
-         <Login onNavigateToRegistration={() => setCurrentView('registration')} />
+         <Login 
+         title='Login'
+         onNavigateToRegistration={() => setCurrentView('registration')} />
        )}
     </main>
     </>

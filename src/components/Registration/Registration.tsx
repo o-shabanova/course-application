@@ -7,11 +7,10 @@ import generateId from '../../helpers/generateId';
 
 interface RegistrationProps {
     title: string;
-    onSubmit: () => void;
     onNavigateToLogin: () => void;
 }
 
-export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onNavigateToLogin }) => {
+export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToLogin }) => {
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -92,7 +91,7 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onSubmit, onN
                             onChange={handleChange}
                             />
                         ))}
-                    <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" onClick={onSubmit} className="main-button registration-button" />
+                    <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" className="main-button registration-button" />
                     <p className="registration-paragraph">If you have an account you may <span className="registration-link" onClick={onNavigateToLogin}>Login</span></p>
                 </div>
             </fieldset>
