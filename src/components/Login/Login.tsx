@@ -4,6 +4,9 @@ import generateId from '../../helpers/generateId';
 import { Input } from '../../common/Input/Input';
 import { Button } from '../../common/Button/Button';
 import { BUTTON_TEXT } from '../../constants';
+import { handleFormChange } from '../../helpers/handleFormChange';
+import { handleFormSubmit } from '../../helpers/handleFormSubmit';
+import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 
 interface LoginProps {
     title: string,
@@ -23,57 +26,24 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
     }));
 
     const inputs = [
-        {
-            id: inputIds.email,
-            name: 'email',
-            className: 'auth-input email-input',
-            labelClassName: 'auth-label',
-            labelText: 'Email',
-            type: 'email',
-            placeholderText: 'Enter your email',
-            value: values.email,
-            errorMessage: 'Email is required',
-            pattern: "^[A-Za-z0-9_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z0-9-]{2,4}$",
-            title: "Please enter a valid email address",
-            required: true
-        }, 
-        {
-            id: inputIds.password,
-            name: 'password',
-            className: 'auth-input password-input',
-            labelClassName: 'auth-label',
-            labelText: 'Password',
-            type: 'password',
-            placeholderText: 'Enter your password',
-            value: values.password,
-            errorMessage: 'Password is required',
-            pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d!@#$%^&*]{8,}$",
-            title: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
-            required: true
-
-        }
+        createEmailInputConfig(inputIds.email, values.email),
+        createPasswordInputConfig(inputIds.password, values.password)
     ];
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(values);
-    }
-    
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
-      };
+    const onSubmit = handleFormSubmit(values);
+    const onChange = handleFormChange(setValues);
 
 
     return (
         <>
-        <form className="auth-container" onSubmit={handleSubmit}>
+        <form className="auth-container" onSubmit={onSubmit}>
             <h2 className="auth-title">{title}</h2>
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
                     {inputs.map((input) => (<Input
                     key={input.id}
                     {...input}
-                    onChange={handleChange}
+                    onChange={onChange}
                     />
                     ))}
                     <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button auth-button" />
