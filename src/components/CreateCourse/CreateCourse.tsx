@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './CreateCourse.css';
 import Button from '../../common/Button/Button';
-import { BUTTON_TEXT } from '../../constants';
+import { BUTTON_TEXT, mockedAuthorsList } from '../../constants';
 import { Input } from '../../common/Input/Input';
 import generateId from '../../helpers/generateId';
 import { createTitleInputConfig, 
@@ -11,7 +11,7 @@ import { createTitleInputConfig,
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { handleFormSubmit } from '../../helpers/handleFormSubmit';
 import getCourseDuration from '../../helpers/getCourseDuration';
-
+import AuthorItem from '../AuthorItem/AuthorItem';
 interface CreateCourseProps {
     title: string;
 }
@@ -86,9 +86,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
                     <div className="authors-list">
                         <h3 className="authors-list-subtitle">Authors list</h3>
                         <ul className="authors-list-ul">
-                            <li className="authors-list-items">
-                                <span className="authors-list-item-span">Author 1</span>
-                            </li>
+                            {mockedAuthorsList.map((author) => 
+                                (<AuthorItem key={author.id} author={author} />)
+                                )}
                         </ul>
                     </div>
                 </div>

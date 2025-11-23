@@ -1,0 +1,18 @@
+.author-item {
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+}
+
+.author-item-button {
+    padding: 5px;
+    font-size: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--secondary-button);
+}
+
+.author-item-button:hover {
+    opacity: 0.8;
+}
