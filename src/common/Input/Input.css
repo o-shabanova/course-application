@@ -5,6 +5,7 @@
     font-size: 16px;
     line-height: var(--line-height-main);
     font-weight: var(--font-weight-regular);
+    margin-bottom: 34px;
 }
 
 .error-message {

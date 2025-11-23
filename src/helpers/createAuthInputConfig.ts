@@ -82,8 +82,8 @@ export const createTitleInputConfig = (
     placeholderText: 'Input text',
     value,
     errorMessage: 'Title is required',
-    pattern: "^[A-Za-z0-9]{3,16}$",
-    title: "Title must be between 3 and 16 characters and can only contain letters and numbers",
+    pattern: "^[A-Za-z0-9]{2,16}$",
+    title: "Title must be between 2 and 16 characters and can only contain letters and numbers",
     required: true
 });
 
@@ -100,8 +100,8 @@ export const createDescriptionInputConfig = (
     placeholderText: 'Input text',
     value,
     errorMessage: 'Description is required',
-    pattern: "^[\\s\\S]{20,255}$",
-    title: "Description must be between 20 and 255 characters and can contain letters, numbers and special characters",
+    pattern: "^[\\s\\S]{2,255}$",
+    title: "Description must be between 2 and 255 characters and can contain letters, numbers and special characters",
     required: true
 });
 
@@ -129,7 +129,7 @@ export const createAuthorNameInputConfig = (
 ): InputConfig => ({
     id: inputId,
     name: 'authorName',
-    className: 'create-course-input author-name-input',
+    className: 'auth-input create-course-input author-name-input',
     labelClassName: 'auth-label',
     labelText: 'Author Name',
     type: 'text',

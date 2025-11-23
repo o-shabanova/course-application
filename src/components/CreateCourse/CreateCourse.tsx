@@ -10,6 +10,7 @@ import { createTitleInputConfig,
         createAuthorNameInputConfig} from '../../helpers/createAuthInputConfig';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { handleFormSubmit } from '../../helpers/handleFormSubmit';
+import getCourseDuration from '../../helpers/getCourseDuration';
 
 interface CreateCourseProps {
     title: string;
@@ -31,28 +32,73 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         authorName: generateId()
     }));
 
-    const inputs = [
+
+    const mainInfoInputs = [
         createTitleInputConfig(inputIds.title, values.title),
         createDescriptionInputConfig(inputIds.description, values.description),
-        createDurationInputConfig(inputIds.duration, values.duration),
-        createAuthorNameInputConfig(inputIds.authorName, values.authorName)
-    ]
+    ];
+
+    const durationInput = createDurationInputConfig(inputIds.duration, values.duration);
+    const authorInput = createAuthorNameInputConfig(inputIds.authorName, values.authorName);
 
     const onChange = handleFormChange(setValues);
     const onSubmit = handleFormSubmit(values);
+
+    const durationMinutes = parseInt(values.duration) || 0;
+    const durationDisplay = getCourseDuration(durationMinutes);
+
   return (
     <form className="create-course-container" onSubmit={onSubmit}>
       <h1 className="create-course-title">{title}</h1>
       <fieldset className="create-course-fieldset">
         
             <h2 className="create-course-subtitle">Main info</h2>
-            {inputs.map((input) => (
+            {mainInfoInputs.map((input) => (
                 <Input key={input.id} 
                 {...input} 
                 onChange={onChange}
                 />
             ))}
-        
+            <h2 className="duration-subtitle">Duration</h2>
+            <div className="duration-input-wrapper">
+                <Input 
+                    {...durationInput} 
+                    onChange={onChange}
+                />
+                <span className="duration-display">{durationDisplay}</span>
+            </div>
+            <div className="authors-wrapper">
+                <div className="authors-left">
+                    <div className="create-authors-wrapper">
+                        <h2 className="authors-subtitle">Authors</h2>
+                        <div className="author-input-wrapper">
+                            <Input 
+                                {...authorInput} 
+                                onChange={onChange}
+                            />
+                            <Button 
+                                buttonText={BUTTON_TEXT.CREATE_AUTHOR} 
+                                type="button" 
+                                className="main-button create-author-button" 
+                            />
+                        </div>
+                    </div>
+                    <div className="authors-list">
+                        <h3 className="authors-list-subtitle">Authors list</h3>
+                        <ul className="authors-list-ul">
+                            <li className="authors-list-items">
+                                <span className="authors-list-item-span">Author 1</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div className="course-authors">
+                    <h2 className="course-authors-subtitle">Course Authors</h2>
+                    <ul className="course-authors-list">
+                        <li className="course-authors-list-item">Author list is empty</li>
+                    </ul>
+                </div>
+            </div>
       </fieldset>
       <div className="create-course-buttons-container">
         <Button buttonText={BUTTON_TEXT.CREATE_COURSE} type="submit" className="main-button create-course-button" />
