@@ -82,7 +82,7 @@ export const createTitleInputConfig = (
     placeholderText: 'Input text',
     value,
     errorMessage: 'Title is required',
-    pattern: "^[A-Za-z0-9]{2,16}$",
+    pattern: "^[A-Za-z0-9\\s]{2,16}$",
     title: "Title must be between 2 and 16 characters and can only contain letters and numbers",
     required: true
 });
@@ -136,7 +136,7 @@ export const createAuthorNameInputConfig = (
     placeholderText: 'Enter author name',
     value,
     errorMessage: 'Author Name is required',
-    pattern: "^[A-Za-z\\s]{3,16}$",
-    title: "Author Name must be between 3 and 16 characters and can only contain letters and spaces",
+    pattern: "^[A-Za-z\\s]{2,16}$",
+    title: "Author Name must be between 2 and 16 characters and can only contain letters and spaces",
     required: true
 });

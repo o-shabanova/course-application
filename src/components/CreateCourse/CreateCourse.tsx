@@ -12,8 +12,14 @@ import { handleFormChange } from '../../helpers/handleFormChange';
 import { handleFormSubmit } from '../../helpers/handleFormSubmit';
 import getCourseDuration from '../../helpers/getCourseDuration';
 import AuthorItem from '../AuthorItem/AuthorItem';
+import { Author } from '../../helpers/getAuthorsNames';
 interface CreateCourseProps {
-    title: string;
+    id: string
+   title: string
+   description:	string
+   creationDate: string
+   duration: number
+   authors: string[]
 }
 
 const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
@@ -24,6 +30,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         duration: '',
         authorName: '',
     });
+
+    const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
+    const [authorInputKey, setAuthorInputKey] = useState(0);
 
     const [inputIds] = useState(() => ({
         title: generateId(),
@@ -43,6 +52,18 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
 
     const onChange = handleFormChange(setValues);
     const onSubmit = handleFormSubmit(values);
+
+    const handleCreateAuthor = () => {
+        if (values.authorName.trim()) {
+            const newAuthor: Author = {
+                id: generateId(),
+                name: values.authorName.trim()
+            };
+            setAuthors([...authors, newAuthor]);
+            setValues({ ...values, authorName: '' });
+            setAuthorInputKey(prev => prev + 1);
+        }
+    };
 
     const durationMinutes = parseInt(values.duration) || 0;
     const durationDisplay = getCourseDuration(durationMinutes);
@@ -73,20 +94,22 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
                         <h2 className="authors-subtitle">Authors</h2>
                         <div className="author-input-wrapper">
                             <Input 
+                                key={authorInputKey}
                                 {...authorInput} 
                                 onChange={onChange}
                             />
                             <Button 
                                 buttonText={BUTTON_TEXT.CREATE_AUTHOR} 
                                 type="button" 
-                                className="main-button create-author-button" 
+                                className="main-button create-author-button"
+                                onClick={handleCreateAuthor}
                             />
                         </div>
                     </div>
                     <div className="authors-list">
                         <h3 className="authors-list-subtitle">Authors list</h3>
                         <ul className="authors-list-ul">
-                            {mockedAuthorsList.map((author) => 
+                            {authors.map((author) => 
                                 (<AuthorItem key={author.id} author={author} />)
                                 )}
                         </ul>
