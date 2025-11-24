@@ -14,12 +14,7 @@ import getCourseDuration from '../../helpers/getCourseDuration';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { Author } from '../../helpers/getAuthorsNames';
 interface CreateCourseProps {
-    id: string
    title: string
-   description:	string
-   creationDate: string
-   duration: number
-   authors: string[]
 }
 
 const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
@@ -32,6 +27,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
     });
 
     const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
+    const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
     const [authorInputKey, setAuthorInputKey] = useState(0);
 
     const [inputIds] = useState(() => ({
@@ -63,6 +59,20 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
             setValues({ ...values, authorName: '' });
             setAuthorInputKey(prev => prev + 1);
         }
+    };
+
+    const handleAddAuthorToCourse = (author: Author) => {
+        setAuthors(authors.filter(a => a.id !== author.id));
+        setCourseAuthors([...courseAuthors, author]);
+    };
+
+    const handleRemoveAuthorFromCourse = (author: Author) => {
+        setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
+        setAuthors([...authors, author]);
+    };
+
+    const handleDeleteAuthor = (author: Author) => {
+        setAuthors(authors.filter(a => a.id !== author.id));
     };
 
     const durationMinutes = parseInt(values.duration) || 0;
@@ -110,7 +120,13 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
                         <h3 className="authors-list-subtitle">Authors list</h3>
                         <ul className="authors-list-ul">
                             {authors.map((author) => 
-                                (<AuthorItem key={author.id} author={author} />)
+                                (<AuthorItem 
+                                    key={author.id} 
+                                    author={author}
+                                    isAddButtonVisible={true}
+                                    onAdd={() => handleAddAuthorToCourse(author)}
+                                    onDelete={() => handleDeleteAuthor(author)}
+                                />)
                                 )}
                         </ul>
                     </div>
@@ -118,7 +134,18 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
                 <div className="course-authors">
                     <h2 className="course-authors-subtitle">Course Authors</h2>
                     <ul className="course-authors-list">
-                        <li className="course-authors-list-item">Author list is empty</li>
+                        {courseAuthors.length === 0 ? (
+                            <li className="course-authors-list-item">Author list is empty</li>
+                        ) : (
+                            courseAuthors.map((author) => 
+                                (<AuthorItem 
+                                    key={author.id} 
+                                    author={author}
+                                    isAddButtonVisible={false}
+                                    onDelete={() => handleRemoveAuthorFromCourse(author)}
+                                />)
+                            )
+                        )}
                     </ul>
                 </div>
             </div>

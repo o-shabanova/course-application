@@ -6,18 +6,33 @@ import Button from '../../common/Button/Button';
 
 interface AuthorItemProps {
     author: Author;
+    isAddButtonVisible?: boolean;
+    onAdd?: () => void;
+    onDelete?: () => void;
 }
 
 const defaultAuthor: Author = {
     id: '1',
     name: 'John Doe'
 }
-const AuthorItem: React.FC<AuthorItemProps> = ({author = defaultAuthor}) => {
+const AuthorItem: React.FC<AuthorItemProps> = ({author = defaultAuthor, isAddButtonVisible = true, onAdd, onDelete}) => {
     return (
             <li className="author-item">
             <span className="author-name">{author.name}</span>
-            <Button buttonText={BUTTON_TEXT.ADD_AUTHOR} type="button" className="author-item-button add-author-button" />
-            <Button buttonText={BUTTON_TEXT.DELETE_AUTHOR} type="button" className="author-item-button delete-author-button" />
+            {isAddButtonVisible && (
+                <Button 
+                    buttonText={BUTTON_TEXT.ADD_AUTHOR} 
+                    type="button" 
+                    className="author-item-button add-author-button"
+                    onClick={onAdd}
+                />
+            )}
+            <Button 
+                buttonText={BUTTON_TEXT.DELETE_AUTHOR} 
+                type="button" 
+                className="author-item-button delete-author-button"
+                onClick={onDelete}
+            />
             </li>
         
     )
