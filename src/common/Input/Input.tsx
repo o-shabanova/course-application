@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InputHTMLAttributes } from 'react';
 import './Input.css';
 
@@ -14,19 +14,14 @@ interface InputProps {
     labelClassName?: string,
     errorMessage?: string,
     pattern?: string,
-    title?: string
+    title?: string,
+    touched?: boolean,
+    onFocus?: () => void,
+    onBlur?: () => void
 }
 
 export const Input: React.FC<InputProps> = (props) => {
-    const [touched, setTouched] = useState(false);
-
-    const handleFocus = () => {
-        setTouched(false);
-    };
-
-    const handleBlur = () => {
-        setTouched(true);
-    };
+    const touched = props.touched ?? false;
 
     return (
     <div className={props.className}>
@@ -38,8 +33,8 @@ export const Input: React.FC<InputProps> = (props) => {
         placeholder={props.placeholderText} 
         value={props.value}
         onChange={props.onChange} 
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
         required={props.required}
         pattern={props.pattern}
         title={props.title}

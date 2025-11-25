@@ -26,9 +26,15 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         authorName: '',
     });
 
+    const [touched, setTouched] = useState({
+        title: false,
+        description: false,
+        duration: false,
+        authorName: false,
+    });
+
     const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
     const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
-    const [authorInputKey, setAuthorInputKey] = useState(0);
 
     const [inputIds] = useState(() => ({
         title: generateId(),
@@ -57,7 +63,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
             };
             setAuthors([...authors, newAuthor]);
             setValues({ ...values, authorName: '' });
-            setAuthorInputKey(prev => prev + 1);
+            setTouched({ ...touched, authorName: false });
         }
     };
 
@@ -78,6 +84,23 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
     const durationMinutes = parseInt(values.duration) || 0;
     const durationDisplay = getCourseDuration(durationMinutes);
 
+    const handleCancel = () => {
+        setValues({
+            title: '',
+            description: '',
+            duration: '',
+            authorName: '',
+        });
+        setTouched({
+            title: false,
+            description: false,
+            duration: false,
+            authorName: false,
+        });
+        setAuthors(mockedAuthorsList);
+        setCourseAuthors([]);
+    };
+
   return (
     <form className="create-course-container" onSubmit={onSubmit}>
       <h1 className="create-course-title">{title}</h1>
@@ -85,9 +108,13 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         
             <h2 className="create-course-subtitle">Main info</h2>
             {mainInfoInputs.map((input) => (
-                <Input key={input.id} 
-                {...input} 
-                onChange={onChange}
+                <Input 
+                    key={input.id} 
+                    {...input} 
+                    onChange={onChange}
+                    touched={touched[input.name as keyof typeof touched]}
+                    onFocus={() => setTouched({ ...touched, [input.name]: false })}
+                    onBlur={() => setTouched({ ...touched, [input.name]: true })}
                 />
             ))}
             <h2 className="duration-subtitle">Duration</h2>
@@ -95,6 +122,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
                 <Input 
                     {...durationInput} 
                     onChange={onChange}
+                    touched={touched.duration}
+                    onFocus={() => setTouched({ ...touched, duration: false })}
+                    onBlur={() => setTouched({ ...touched, duration: true })}
                 />
                 <span className="duration-display">{durationDisplay}</span>
             </div>
@@ -104,9 +134,11 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
                         <h2 className="authors-subtitle">Authors</h2>
                         <div className="author-input-wrapper">
                             <Input 
-                                key={authorInputKey}
                                 {...authorInput} 
                                 onChange={onChange}
+                                touched={touched.authorName}
+                                onFocus={() => setTouched({ ...touched, authorName: false })}
+                                onBlur={() => setTouched({ ...touched, authorName: true })}
                             />
                             <Button 
                                 buttonText={BUTTON_TEXT.CREATE_AUTHOR} 
@@ -151,8 +183,19 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
             </div>
       </fieldset>
       <div className="create-course-buttons-container">
-        <Button buttonText={BUTTON_TEXT.CREATE_COURSE} type="submit" className="main-button create-course-button" />
-        <Button buttonText={BUTTON_TEXT.CANCEL} type="button" className="main-button cancel-button" />
+        <Button 
+        buttonText={BUTTON_TEXT.CREATE_COURSE} 
+        type="submit" 
+        className="main-button create-course-button" 
+        // onClick={handleSubmit}
+        // onClick={() => navigate('/courses')}
+        />
+        <Button 
+        buttonText={BUTTON_TEXT.CANCEL} 
+        type="button" 
+        className="main-button cancel-button"
+        onClick={handleCancel}
+        />
       </div>
     </form>
   );
