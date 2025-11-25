@@ -15,9 +15,9 @@
     display: none;
 }
 
-.input:invalid[data-focused="true"] {
+.input:invalid[data-touched="true"] {
     border-color: var(--error-color);
 }
-.input:invalid[data-focused="true"] ~ .error-message {
+.input:invalid[data-touched="true"] ~ .error-message {
     display: block;
 }

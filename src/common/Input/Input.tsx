@@ -18,10 +18,15 @@ interface InputProps {
 }
 
 export const Input: React.FC<InputProps> = (props) => {
-    const [focused, setFocused] = useState(false);
+    const [touched, setTouched] = useState(false);
 
-    const handleFocus = () => setFocused(true);
+    const handleFocus = () => {
+        setTouched(false);
+    };
 
+    const handleBlur = () => {
+        setTouched(true);
+    };
 
     return (
     <div className={props.className}>
@@ -33,11 +38,12 @@ export const Input: React.FC<InputProps> = (props) => {
         placeholder={props.placeholderText} 
         value={props.value}
         onChange={props.onChange} 
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         required={props.required}
         pattern={props.pattern}
         title={props.title}
-        onBlur={handleFocus}
-        data-focused={focused.toString()}
+        data-touched={touched.toString()}
         />
         <span className="error-message">{props.errorMessage}</span>
     </div>
