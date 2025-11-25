@@ -9,6 +9,7 @@ import { createTitleInputConfig,
         createDurationInputConfig, 
         createAuthorNameInputConfig} from '../../helpers/createAuthInputConfig';
 import { handleFormChange } from '../../helpers/handleFormChange';
+import { validateTitle, validateDescription, validateDuration, validateAuthorName } from '../../helpers/validation';
 import getCourseDuration from '../../helpers/getCourseDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
 import AuthorItem from '../AuthorItem/AuthorItem';
@@ -47,6 +48,13 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
         authorName: false,
     });
 
+    const [errors, setErrors] = useState({
+        title: '',
+        description: '',
+        duration: '',
+        authorName: '',
+    });
+
     const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
 
     // Compute available authors by filtering out course authors
@@ -72,8 +80,30 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
 
     const onChange = handleFormChange(setValues);
 
+    const handleBlur = (fieldName: keyof typeof values) => {
+        setTouched({ ...touched, [fieldName]: true });
+        
+        let error = '';
+        if (fieldName === 'title') {
+            error = validateTitle(values.title);
+        } else if (fieldName === 'description') {
+            error = validateDescription(values.description);
+        } else if (fieldName === 'duration') {
+            error = validateDuration(values.duration);
+        } else if (fieldName === 'authorName') {
+            error = validateAuthorName(values.authorName);
+        }
+        
+        setErrors({ ...errors, [fieldName]: error });
+    };
+
+    const handleFocus = (fieldName: keyof typeof values) => {
+        setTouched({ ...touched, [fieldName]: false });
+    };
+
     const handleCreateAuthor = () => {
-        if (values.authorName.trim()) {
+        const authorNameError = validateAuthorName(values.authorName);
+        if (!authorNameError && values.authorName.trim()) {
             const newAuthor: Author = {
                 id: generateId(),
                 name: values.authorName.trim()
@@ -83,6 +113,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
             }
             setValues({ ...values, authorName: '' });
             setTouched({ ...touched, authorName: false });
+            setErrors({ ...errors, authorName: '' });
+        } else {
+            setTouched({ ...touched, authorName: true });
+            setErrors({ ...errors, authorName: authorNameError || 'Author Name is required' });
         }
     };
 
@@ -117,6 +151,12 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
             duration: false,
             authorName: false,
         });
+        setErrors({
+            title: '',
+            description: '',
+            duration: '',
+            authorName: '',
+        });
         setCourseAuthors([]);
     };
 
@@ -127,11 +167,25 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        const isTitleValid = values.title.trim() !== '';
-        const isDescriptionValid = values.description.trim() !== '';
-        const isDurationValid = values.duration.trim() !== '' && parseInt(values.duration) > 0;
+        const titleError = validateTitle(values.title);
+        const descriptionError = validateDescription(values.description);
+        const durationError = validateDuration(values.duration);
 
-        if (isTitleValid && isDescriptionValid && isDurationValid) {
+        setErrors({
+            title: titleError,
+            description: descriptionError,
+            duration: durationError,
+            authorName: '',
+        });
+
+        setTouched({
+            title: true,
+            description: true,
+            duration: true,
+            authorName: false,
+        });
+
+        if (!titleError && !descriptionError && !durationError) {
             const newCourse: Course = {
                 id: generateId(),
                 title: values.title.trim(),
@@ -145,13 +199,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
                 onCourseCreated(newCourse);
             }
             resetForm();
-        } else {
-            setTouched({
-                title: true,
-                description: true,
-                duration: true,
-                authorName: false,
-            });
         }
     };
 
@@ -170,8 +217,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
                     {...input} 
                     onChange={onChange}
                     touched={touched[input.name as keyof typeof touched]}
-                    onFocus={() => setTouched({ ...touched, [input.name]: false })}
-                    onBlur={() => setTouched({ ...touched, [input.name]: true })}
+                    errorMessage={errors[input.name as keyof typeof errors]}
+                    onFocus={() => handleFocus(input.name as keyof typeof values)}
+                    onBlur={() => handleBlur(input.name as keyof typeof values)}
                 />
             ))}
             <h2 className="duration-subtitle">Duration</h2>
@@ -180,8 +228,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
                     {...durationInput} 
                     onChange={onChange}
                     touched={touched.duration}
-                    onFocus={() => setTouched({ ...touched, duration: false })}
-                    onBlur={() => setTouched({ ...touched, duration: true })}
+                    errorMessage={errors.duration}
+                    onFocus={() => handleFocus('duration')}
+                    onBlur={() => handleBlur('duration')}
                 />
                 <span className="duration-display">{durationDisplay}</span>
             </div>
@@ -194,8 +243,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
                                 {...authorInput} 
                                 onChange={onChange}
                                 touched={touched.authorName}
-                                onFocus={() => setTouched({ ...touched, authorName: false })}
-                                onBlur={() => setTouched({ ...touched, authorName: true })}
+                                errorMessage={errors.authorName}
+                                onFocus={() => handleFocus('authorName')}
+                                onBlur={() => handleBlur('authorName')}
                             />
                             <Button 
                                 buttonText={BUTTON_TEXT.CREATE_AUTHOR} 

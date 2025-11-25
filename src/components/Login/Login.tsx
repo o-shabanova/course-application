@@ -5,7 +5,7 @@ import { Input } from '../../common/Input/Input';
 import { Button } from '../../common/Button/Button';
 import { BUTTON_TEXT } from '../../constants';
 import { handleFormChange } from '../../helpers/handleFormChange';
-import { handleFormSubmit } from '../../helpers/handleFormSubmit';
+import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 
 interface LoginProps {
@@ -20,6 +20,16 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
         password: '',
     });
 
+    const [touched, setTouched] = useState({
+        email: false,
+        password: false,
+    });
+
+    const [errors, setErrors] = useState({
+        email: '',
+        password: '',
+    });
+
     const [inputIds] = useState(() => ({
         email: generateId(),
         password: generateId(),
@@ -30,21 +40,63 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
         createPasswordInputConfig(inputIds.password, values.password)
     ];
 
-    const onSubmit = handleFormSubmit(values);
     const onChange = handleFormChange(setValues);
+
+    const handleBlur = (fieldName: keyof typeof values) => {
+        setTouched({ ...touched, [fieldName]: true });
+        
+        let error = '';
+        if (fieldName === 'email') {
+            error = validateEmail(values.email);
+        } else if (fieldName === 'password') {
+            error = validatePassword(values.password);
+        }
+        
+        setErrors({ ...errors, [fieldName]: error });
+    };
+
+    const handleFocus = (fieldName: keyof typeof values) => {
+        setTouched({ ...touched, [fieldName]: false });
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        const emailError = validateEmail(values.email);
+        const passwordError = validatePassword(values.password);
+
+        setErrors({
+            email: emailError,
+            password: passwordError,
+        });
+
+        setTouched({
+            email: true,
+            password: true,
+        });
+
+        if (!emailError && !passwordError) {
+            console.log(values);
+        }
+    };
 
 
     return (
         <>
-        <form className="auth-container" onSubmit={onSubmit}>
+        <form className="auth-container" onSubmit={handleSubmit}>
             <h2 className="auth-title">{title}</h2>
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
-                    {inputs.map((input) => (<Input
-                    key={input.id}
-                    {...input}
-                    onChange={onChange}
-                    />
+                    {inputs.map((input) => (
+                        <Input
+                            key={input.id}
+                            {...input}
+                            onChange={onChange}
+                            touched={touched[input.name as keyof typeof touched]}
+                            errorMessage={errors[input.name as keyof typeof errors]}
+                            onFocus={() => handleFocus(input.name as keyof typeof values)}
+                            onBlur={() => handleBlur(input.name as keyof typeof values)}
+                        />
                     ))}
                     <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button auth-button" />
                     <p className="auth-paragraph">If you don't have an account you may <span className="auth-link" onClick={onNavigateToRegistration}>Registration</span></p>

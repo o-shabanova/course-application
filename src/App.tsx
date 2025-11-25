@@ -6,6 +6,7 @@ import EmptyCourseList from './components/EmptyCourseList/EmptyCourseList';
 import CreateCourse from './components/CreateCourse/CreateCourse';
 import { Author } from './helpers/getAuthorsNames';
 
+
 interface Course {
   id: string;
   title: string;
@@ -16,6 +17,7 @@ interface Course {
 }
 
 function App() {
+
   const [courses, setCourses] = useState<Course[]>(mockedCoursesList);
   const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
   const [currentView, setCurrentView] = useState<'courses' | 'create'>('create');

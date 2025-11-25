@@ -7,10 +7,6 @@ interface InputConfig {
     type: string;
     placeholderText: string;
     value: string;
-    errorMessage: string;
-    pattern?: string;
-    min?: number;
-    title: string;
     required: boolean;
 }
 
@@ -26,9 +22,6 @@ export const createEmailInputConfig = (
     type: 'email',
     placeholderText: 'Enter your email',
     value,
-    errorMessage: 'Email is required',
-    pattern: "^[A-Za-z0-9_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z0-9-]{2,4}$",
-    title: "Please enter a valid email address",
     required: true
 });
 
@@ -44,9 +37,6 @@ export const createPasswordInputConfig = (
     type: 'password',
     placeholderText: 'Enter your password',
     value,
-    errorMessage: 'Password is required',
-    pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d!@#$%^&*]{8,}$",
-    title: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
     required: true
 });
 
@@ -62,9 +52,6 @@ export const createNameInputConfig = (
     type: 'text',
     placeholderText: 'Enter your name',
     value,
-    errorMessage: 'Name is required',
-    pattern: "^[A-Za-z0-9]{3,16}$",
-    title: "Name must be between 3 and 16 characters and can only contain letters and numbers",
     required: true
 });
 
@@ -81,9 +68,6 @@ export const createTitleInputConfig = (
     type: 'text',
     placeholderText: 'Input text',
     value,
-    errorMessage: 'Title is required',
-    pattern: "^[A-Za-z0-9\\s]{2,16}$",
-    title: "Title must be between 2 and 16 characters and can only contain letters and numbers",
     required: true
 });
 
@@ -99,9 +83,6 @@ export const createDescriptionInputConfig = (
     type: 'text',
     placeholderText: 'Input text',
     value,
-    errorMessage: 'Description is required',
-    pattern: "^[\\s\\S]{2,255}$",
-    title: "Description must be between 2 and 255 characters and can contain letters, numbers and special characters",
     required: true
 });
 
@@ -117,9 +98,6 @@ export const createDurationInputConfig = (
     type: 'number',
     placeholderText: 'Enter duration in minutes',
     value,
-    errorMessage: 'Duration is required',
-    min: 1,
-    title: "Duration must be a positive number greater than 0 and can only contain numbers",
     required: true
 });
 
@@ -135,8 +113,5 @@ export const createAuthorNameInputConfig = (
     type: 'text',
     placeholderText: 'Enter author name',
     value,
-    errorMessage: 'Author Name is required',
-    pattern: "^[A-Za-z\\s]{2,16}$",
-    title: "Author Name must be between 2 and 16 characters and can only contain letters and spaces",
     required: false
 });
