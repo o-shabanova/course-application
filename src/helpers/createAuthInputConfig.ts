@@ -138,5 +138,5 @@ export const createAuthorNameInputConfig = (
     errorMessage: 'Author Name is required',
     pattern: "^[A-Za-z\\s]{2,16}$",
     title: "Author Name must be between 2 and 16 characters and can only contain letters and spaces",
-    required: true
+    required: false
 });

@@ -9,7 +9,6 @@ import { createTitleInputConfig,
         createDurationInputConfig, 
         createAuthorNameInputConfig} from '../../helpers/createAuthInputConfig';
 import { handleFormChange } from '../../helpers/handleFormChange';
-import { handleFormSubmit } from '../../helpers/handleFormSubmit';
 import getCourseDuration from '../../helpers/getCourseDuration';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { Author } from '../../helpers/getAuthorsNames';
@@ -53,7 +52,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
     const authorInput = createAuthorNameInputConfig(inputIds.authorName, values.authorName);
 
     const onChange = handleFormChange(setValues);
-    const onSubmit = handleFormSubmit(values);
 
     const handleCreateAuthor = () => {
         if (values.authorName.trim()) {
@@ -84,7 +82,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
     const durationMinutes = parseInt(values.duration) || 0;
     const durationDisplay = getCourseDuration(durationMinutes);
 
-    const handleCancel = () => {
+    const resetForm = () => {
         setValues({
             title: '',
             description: '',
@@ -101,8 +99,41 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         setCourseAuthors([]);
     };
 
+    const handleCancel = () => {
+        resetForm();
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        const isTitleValid = values.title.trim() !== '';
+        const isDescriptionValid = values.description.trim() !== '';
+        const isDurationValid = values.duration.trim() !== '' && parseInt(values.duration) > 0;
+
+        if (isTitleValid && isDescriptionValid && isDurationValid) {
+            const courseData = {
+                title: values.title,
+                description: values.description,
+                duration: parseInt(values.duration),
+                authors: courseAuthors
+            };
+            console.log('Course created:', courseData);
+            resetForm();
+        } else {
+            setTouched({
+                title: true,
+                description: true,
+                duration: true,
+                authorName: false,
+            });
+        }
+    };
+
+
+   
+
   return (
-    <form className="create-course-container" onSubmit={onSubmit}>
+    <form className="create-course-container" onSubmit={handleSubmit}>
       <h1 className="create-course-title">{title}</h1>
       <fieldset className="create-course-fieldset">
         
@@ -187,8 +218,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         buttonText={BUTTON_TEXT.CREATE_COURSE} 
         type="submit" 
         className="main-button create-course-button" 
-        // onClick={handleSubmit}
-        // onClick={() => navigate('/courses')}
         />
         <Button 
         buttonText={BUTTON_TEXT.CANCEL} 
