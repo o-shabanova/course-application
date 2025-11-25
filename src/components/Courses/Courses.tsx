@@ -23,14 +23,20 @@ interface Author {
   interface CoursesProps {
     courses: Course[];
     authors: Author[];
+    onNavigateToCreate?: () => void;
   }
 
-const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
+const Courses: React.FC<CoursesProps> = ({courses, authors, onNavigateToCreate}) => {
   return (
-    <main className="courses-container">
+    <div className="courses-container">
         <div className="courses-header">
             <SearchBar />
-            <Button buttonText={BUTTON_TEXT.ADD_NEW_COURSE} type="button" className="main-button add-new-course-button" />
+            <Button 
+              buttonText={BUTTON_TEXT.ADD_NEW_COURSE} 
+              type="button" 
+              className="main-button add-new-course-button"
+              onClick={onNavigateToCreate}
+            />
         </div>
         <ul className="courses-list">
             {courses.map((course) => (<li key={course.id} className="course-list-item">
@@ -38,7 +44,7 @@ const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
                 </li>
             ))}
         </ul>
-    </main>
+    </div>
   );
 };
 export default Courses;

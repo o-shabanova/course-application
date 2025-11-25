@@ -15,34 +15,35 @@ interface Course {
 }
 
 function App() {
-    // const [currentView, setCurrentView] = useState<'registration' | 'login'>('registration');
   const [courses, setCourses] = useState<Course[]>(mockedCoursesList);
+  const [currentView, setCurrentView] = useState<'courses' | 'create'>('create');
 
   const handleCourseCreated = (course: Course) => {
     setCourses([...courses, course]);
+    setCurrentView('courses');
   };
 
   return (
     <>
     <Header />
-    {/* {(courses.length > 0) ? <Courses courses={courses} authors={mockedAuthorsList} /> : <EmptyCourseList />} */}
-    <main className="main-container">
-        {/* {currentView === 'registration' ? (
-         <Registration 
-           title="Registration" 
-           onNavigateToLogin={() => setCurrentView('login')}
-         />
-       ) : (
-         <Login 
-         title='Login'
-         onNavigateToRegistration={() => setCurrentView('registration')} />
-       )} */}
-
-       <CreateCourse 
-         title="Course Edit/Create Page"
-         onCourseCreated={handleCourseCreated}
-       />
-    </main>
+      <main className="main-container">
+      {currentView === 'courses' ? (
+      (courses.length > 0) ? (
+        <Courses 
+          courses={courses} 
+          authors={mockedAuthorsList}
+          onNavigateToCreate={() => setCurrentView('create')}
+        />
+      ) : (
+        <EmptyCourseList />
+      )
+    ) : (
+        <CreateCourse 
+          title="Course Edit/Create Page"
+          onCourseCreated={handleCourseCreated}
+        />
+        )}
+      </main>
     </>
   );
 }
