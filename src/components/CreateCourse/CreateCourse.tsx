@@ -10,13 +10,25 @@ import { createTitleInputConfig,
         createAuthorNameInputConfig} from '../../helpers/createAuthInputConfig';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import getCourseDuration from '../../helpers/getCourseDuration';
+import getCurrentDate from '../../helpers/getCurrentDate';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { Author } from '../../helpers/getAuthorsNames';
-interface CreateCourseProps {
-   title: string
+
+interface Course {
+    id: string;
+    title: string;
+    description: string;
+    creationDate: string;
+    duration: number;
+    authors: string[];
 }
 
-const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
+interface CreateCourseProps {
+   title: string;
+   onCourseCreated?: (course: Course) => void;
+}
+
+const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated}) => {
 
     const [values, setValues] = useState({
         title: '',
@@ -111,13 +123,18 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title}) => {
         const isDurationValid = values.duration.trim() !== '' && parseInt(values.duration) > 0;
 
         if (isTitleValid && isDescriptionValid && isDurationValid) {
-            const courseData = {
-                title: values.title,
-                description: values.description,
+            const newCourse: Course = {
+                id: generateId(),
+                title: values.title.trim(),
+                description: values.description.trim(),
+                creationDate: getCurrentDate(),
                 duration: parseInt(values.duration),
-                authors: courseAuthors
+                authors: courseAuthors.map(author => author.id)
             };
-            console.log('Course created:', courseData);
+            
+            if (onCourseCreated) {
+                onCourseCreated(newCourse);
+            }
             resetForm();
         } else {
             setTouched({
