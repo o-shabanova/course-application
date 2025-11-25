@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './CreateCourse.css';
 import Button from '../../common/Button/Button';
-import { BUTTON_TEXT, mockedAuthorsList } from '../../constants';
+import { BUTTON_TEXT } from '../../constants';
 import { Input } from '../../common/Input/Input';
 import generateId from '../../helpers/generateId';
 import { createTitleInputConfig, 
@@ -26,9 +26,12 @@ interface Course {
 interface CreateCourseProps {
    title: string;
    onCourseCreated?: (course: Course) => void;
+   authors: Author[];
+   onAuthorCreated?: (author: Author) => void;
+   onAuthorDeleted?: (authorId: string) => void;
 }
 
-const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated}) => {
+const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, authors: allAuthors, onAuthorCreated, onAuthorDeleted}) => {
 
     const [values, setValues] = useState({
         title: '',
@@ -44,8 +47,12 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated}) => 
         authorName: false,
     });
 
-    const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
     const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
+
+    // Compute available authors by filtering out course authors
+    const availableAuthors = allAuthors.filter(
+        author => !courseAuthors.some(ca => ca.id === author.id)
+    );
 
     const [inputIds] = useState(() => ({
         title: generateId(),
@@ -71,24 +78,27 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated}) => 
                 id: generateId(),
                 name: values.authorName.trim()
             };
-            setAuthors([...authors, newAuthor]);
+            if (onAuthorCreated) {
+                onAuthorCreated(newAuthor);
+            }
             setValues({ ...values, authorName: '' });
             setTouched({ ...touched, authorName: false });
         }
     };
 
     const handleAddAuthorToCourse = (author: Author) => {
-        setAuthors(authors.filter(a => a.id !== author.id));
         setCourseAuthors([...courseAuthors, author]);
     };
 
     const handleRemoveAuthorFromCourse = (author: Author) => {
         setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
-        setAuthors([...authors, author]);
     };
 
     const handleDeleteAuthor = (author: Author) => {
-        setAuthors(authors.filter(a => a.id !== author.id));
+        if (onAuthorDeleted) {
+            onAuthorDeleted(author.id);
+        }
+        setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
     };
 
     const durationMinutes = parseInt(values.duration) || 0;
@@ -107,7 +117,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated}) => 
             duration: false,
             authorName: false,
         });
-        setAuthors(mockedAuthorsList);
         setCourseAuthors([]);
     };
 
@@ -199,7 +208,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated}) => 
                     <div className="authors-list">
                         <h3 className="authors-list-subtitle">Authors list</h3>
                         <ul className="authors-list-ul">
-                            {authors.map((author) => 
+                            {availableAuthors.map((author) => 
                                 (<AuthorItem 
                                     key={author.id} 
                                     author={author}

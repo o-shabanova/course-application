@@ -4,6 +4,7 @@ import Courses from './components/Courses/Courses';
 import { mockedCoursesList, mockedAuthorsList} from './constants';
 import EmptyCourseList from './components/EmptyCourseList/EmptyCourseList';
 import CreateCourse from './components/CreateCourse/CreateCourse';
+import { Author } from './helpers/getAuthorsNames';
 
 interface Course {
   id: string;
@@ -16,11 +17,20 @@ interface Course {
 
 function App() {
   const [courses, setCourses] = useState<Course[]>(mockedCoursesList);
+  const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
   const [currentView, setCurrentView] = useState<'courses' | 'create'>('create');
 
   const handleCourseCreated = (course: Course) => {
     setCourses([...courses, course]);
     setCurrentView('courses');
+  };
+
+  const handleAuthorCreated = (author: Author) => {
+    setAuthors([...authors, author]);
+  };
+
+  const handleAuthorDeleted = (authorId: string) => {
+    setAuthors(authors.filter(a => a.id !== authorId));
   };
 
   return (
@@ -31,7 +41,7 @@ function App() {
       (courses.length > 0) ? (
         <Courses 
           courses={courses} 
-          authors={mockedAuthorsList}
+          authors={authors}
           onNavigateToCreate={() => setCurrentView('create')}
         />
       ) : (
@@ -41,6 +51,9 @@ function App() {
         <CreateCourse 
           title="Course Edit/Create Page"
           onCourseCreated={handleCourseCreated}
+          authors={authors}
+          onAuthorCreated={handleAuthorCreated}
+          onAuthorDeleted={handleAuthorDeleted}
         />
         )}
       </main>
