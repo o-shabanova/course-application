@@ -206,7 +206,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
    
 
   return (
-    <form className="create-course-container" onSubmit={handleSubmit}>
+    <form className="create-course-container" onSubmit={handleSubmit} noValidate>
       <h1 className="create-course-title">{title}</h1>
       <fieldset className="create-course-fieldset">
         
