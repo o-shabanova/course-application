@@ -12,6 +12,7 @@ interface InputProps {
     required?: boolean,
     className?: string,
     labelClassName?: string,
+    id: string,
     hasError?: boolean,
     onFocus?: () => void,
     onBlur?: () => void
@@ -20,8 +21,14 @@ interface InputProps {
 export const Input: React.FC<InputProps> = (props) => {
     return (
     <div className={props.className}>
-        <label className={props.labelClassName}>{props.labelText}</label>
+        <label 
+        className={props.labelClassName}
+        htmlFor={props.id}
+        >
+            {props.labelText}
+        </label>
         <input 
+        id={props.id}
         name={props.name}
         className={`input ${props.hasError ? 'input-error' : ''}`}
         type={props.type} 
