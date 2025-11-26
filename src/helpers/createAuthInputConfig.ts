@@ -95,7 +95,7 @@ export const createDurationInputConfig = (
     className: 'auth-input duration-input',
     labelClassName: 'auth-label',
     labelText: 'Duration',
-    type: 'number',
+    type: 'text',
     placeholderText: 'Enter duration in minutes',
     value,
     required: true
