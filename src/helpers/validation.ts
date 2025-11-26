@@ -65,7 +65,7 @@ export const validateDuration = (duration: string): string => {
     if (!duration.trim()) {
         return 'Duration is required and should be greater than 0';
     }
-    const numValue = parseInt(duration);
+    const numValue = Number(duration);
     if (isNaN(numValue) || numValue <= 0) {
         return 'Duration is required and should be greater than 0';
     }

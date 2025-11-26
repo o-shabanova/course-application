@@ -92,6 +92,11 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
 
     const onChange = handleFormChange(setValues);
 
+    // const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const numericValue = e.target.value.replace(/\D/g, '');
+    //     setValues({ ...values, duration: numericValue });
+    // };
+
     const handleBlur = (fieldName: keyof typeof values) => {
         setTouched({ ...touched, [fieldName]: true });
         
@@ -149,7 +154,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
     };
 
-    const durationMinutes = parseInt(values.duration) || 0;
+    const durationMinutes = Number(values.duration) || 0;
     const durationDisplay = getCourseDuration(durationMinutes);
 
     const resetForm = () => {
@@ -209,7 +214,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 title: values.title.trim(),
                 description: values.description.trim(),
                 creationDate: getCurrentDate(),
-                duration: parseInt(values.duration),
+                duration: Number(values.duration),
                 authors: courseAuthors.map(author => author.id)
             };
             
@@ -251,6 +256,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             <div className="duration-input-wrapper">
                 <Input 
                     {...durationInput} 
+                    // onChange={handleDurationChange}
                     onChange={onChange}
                     hasError={!!(touched.duration && errors.duration)}
                     onFocus={() => handleFocus('duration')}
