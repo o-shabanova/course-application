@@ -180,11 +180,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     };
 
     const handleCancel = () => {
-        resetForm();
-        // Maybe it can help pass the test
         if (onCancel) {
             onCancel();
         }
+        resetForm();
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
