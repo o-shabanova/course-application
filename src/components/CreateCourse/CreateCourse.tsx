@@ -25,14 +25,13 @@ interface Course {
 }
 
 interface CreateCourseProps {
-   title: string;
    onCourseCreated?: (course: Course) => void;
-   authors: Author[];
+   authors?: Author[];
    onAuthorCreated?: (author: Author) => void;
    onAuthorDeleted?: (authorId: string) => void;
 }
 
-const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, authors: allAuthors, onAuthorCreated, onAuthorDeleted}) => {
+const CreateCourse: React.FC<CreateCourseProps> = ({onCourseCreated, authors: allAuthors = [], onAuthorCreated, onAuthorDeleted}) => {
 
     const [values, setValues] = useState({
         title: '',
@@ -207,7 +206,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({title, onCourseCreated, auth
 
   return (
     <form className="create-course-container" onSubmit={handleSubmit} noValidate>
-      <h1 className="create-course-title">{title}</h1>
+      <h1 className="create-course-title">Create Course/Edit Course</h1>
       <fieldset className="create-course-fieldset">
         
             <h2 className="create-course-subtitle">Main info</h2>

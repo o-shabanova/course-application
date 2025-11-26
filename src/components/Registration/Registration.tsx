@@ -9,11 +9,10 @@ import { validateName, validateEmail, validatePassword } from '../../helpers/val
 import { createEmailInputConfig, createPasswordInputConfig, createNameInputConfig } from '../../helpers/createAuthInputConfig';
 
 interface RegistrationProps {
-    title: string;
     onNavigateToLogin: () => void;
 }
 
-export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToLogin }) => {
+const Registration: React.FC<RegistrationProps> = ({ onNavigateToLogin }) => {
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -92,7 +91,7 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
     return (
         <>
         <form className="auth-container" onSubmit={handleSubmit}>
-        <h2 className="auth-title">{title}</h2>
+        <h2 className="auth-title">Registration</h2>
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
                         {inputs.map((input) => (
@@ -114,3 +113,5 @@ export const Registration: React.FC<RegistrationProps> = ({ title, onNavigateToL
         </>
     )
 }
+
+export default Registration;

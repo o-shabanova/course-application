@@ -51,7 +51,6 @@ function App() {
       )
     ) : (
         <CreateCourse 
-          title="Course Edit/Create Page"
           onCourseCreated={handleCourseCreated}
           authors={authors}
           onAuthorCreated={handleAuthorCreated}

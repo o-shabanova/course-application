@@ -9,12 +9,11 @@ import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 
 interface LoginProps {
-    title: string,
     onNavigateToRegistration: () => void;
 }
 
 
-const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
+const Login: React.FC<LoginProps> = ({ onNavigateToRegistration }) => {
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -84,7 +83,7 @@ const Login: React.FC<LoginProps> = ({ title, onNavigateToRegistration }) => {
     return (
         <>
         <form className="auth-container" onSubmit={handleSubmit}>
-            <h2 className="auth-title">{title}</h2>
+            <h2 className="auth-title">Login</h2>
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
                     {inputs.map((input) => (
