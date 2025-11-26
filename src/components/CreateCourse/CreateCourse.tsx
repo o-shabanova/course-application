@@ -210,27 +210,36 @@ const CreateCourse: React.FC<CreateCourseProps> = ({onCourseCreated, authors: al
       <fieldset className="create-course-fieldset">
         
             <h2 className="create-course-subtitle">Main info</h2>
-            {mainInfoInputs.map((input) => (
-                <Input 
-                    key={input.id} 
-                    {...input} 
-                    onChange={onChange}
-                    touched={touched[input.name as keyof typeof touched]}
-                    errorMessage={errors[input.name as keyof typeof errors]}
-                    onFocus={() => handleFocus(input.name as keyof typeof values)}
-                    onBlur={() => handleBlur(input.name as keyof typeof values)}
-                />
-            ))}
+            {mainInfoInputs.map((input) => {
+                const fieldName = input.name as keyof typeof touched;
+                const hasError = touched[fieldName] && errors[fieldName];
+                return (
+                    <div key={input.id}>
+                        <Input 
+                            {...input} 
+                            onChange={onChange}
+                            hasError={!!hasError}
+                            onFocus={() => handleFocus(input.name as keyof typeof values)}
+                            onBlur={() => handleBlur(input.name as keyof typeof values)}
+                        />
+                        {hasError && (
+                            <span className="error-message">{errors[fieldName]}</span>
+                        )}
+                    </div>
+                );
+            })}
             <h2 className="duration-subtitle">Duration</h2>
             <div className="duration-input-wrapper">
                 <Input 
                     {...durationInput} 
                     onChange={onChange}
-                    touched={touched.duration}
-                    errorMessage={errors.duration}
+                    hasError={!!(touched.duration && errors.duration)}
                     onFocus={() => handleFocus('duration')}
                     onBlur={() => handleBlur('duration')}
                 />
+                {touched.duration && errors.duration && (
+                    <span className="error-message">{errors.duration}</span>
+                )}
                 <span className="duration-display">{durationDisplay}</span>
             </div>
             <div className="authors-wrapper">
@@ -241,11 +250,13 @@ const CreateCourse: React.FC<CreateCourseProps> = ({onCourseCreated, authors: al
                             <Input 
                                 {...authorInput} 
                                 onChange={onChange}
-                                touched={touched.authorName}
-                                errorMessage={errors.authorName}
+                                hasError={!!(touched.authorName && errors.authorName)}
                                 onFocus={() => handleFocus('authorName')}
                                 onBlur={() => handleBlur('authorName')}
                             />
+                            {touched.authorName && errors.authorName && (
+                                <span className="error-message">{errors.authorName}</span>
+                            )}
                             <Button 
                                 buttonText={BUTTON_TEXT.CREATE_AUTHOR} 
                                 type="button" 

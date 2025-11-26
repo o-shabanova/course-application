@@ -94,17 +94,24 @@ const Registration: React.FC<RegistrationProps> = ({ onNavigateToLogin }) => {
         <h2 className="auth-title">Registration</h2>
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
-                        {inputs.map((input) => (
-                            <Input 
-                            key={input.id} 
-                            {...input}
-                            onChange={onChange}
-                            touched={touched[input.name as keyof typeof touched]}
-                            errorMessage={errors[input.name as keyof typeof errors]}
-                            onFocus={() => handleFocus(input.name as keyof typeof values)}
-                            onBlur={() => handleBlur(input.name as keyof typeof values)}
-                            />
-                        ))}
+                        {inputs.map((input) => {
+                            const fieldName = input.name as keyof typeof touched;
+                            const hasError = touched[fieldName] && errors[fieldName];
+                            return (
+                                <div key={input.id}>
+                                    <Input 
+                                        {...input}
+                                        onChange={onChange}
+                                        hasError={!!hasError}
+                                        onFocus={() => handleFocus(input.name as keyof typeof values)}
+                                        onBlur={() => handleBlur(input.name as keyof typeof values)}
+                                    />
+                                    {hasError && (
+                                        <span className="error-message">{errors[fieldName]}</span>
+                                    )}
+                                </div>
+                            );
+                        })}
                     <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" className="main-button auth-button" />
                     <p className="auth-paragraph">If you have an account you may <span className="auth-link" onClick={onNavigateToLogin}>Login</span></p>
                 </div>

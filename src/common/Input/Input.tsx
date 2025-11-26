@@ -12,22 +12,18 @@ interface InputProps {
     required?: boolean,
     className?: string,
     labelClassName?: string,
-    errorMessage?: string,
-    touched?: boolean,
+    hasError?: boolean,
     onFocus?: () => void,
     onBlur?: () => void
 }
 
 export const Input: React.FC<InputProps> = (props) => {
-    const touched = props.touched ?? false;
-    const hasError = touched && props.errorMessage;
-
     return (
     <div className={props.className}>
         <label className={props.labelClassName}>{props.labelText}</label>
         <input 
         name={props.name}
-        className={`input ${hasError ? 'input-error' : ''}`}
+        className={`input ${props.hasError ? 'input-error' : ''}`}
         type={props.type} 
         placeholder={props.placeholderText} 
         value={props.value}
@@ -36,6 +32,5 @@ export const Input: React.FC<InputProps> = (props) => {
         onBlur={props.onBlur}
         required={props.required}
         />
-        {hasError && <span className="error-message">{props.errorMessage}</span>}
     </div>
 )};
