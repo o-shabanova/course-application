@@ -56,7 +56,7 @@ export const validateTitle = (title: string): string => {
 
 export const validateDescription = (description: string): string => {
     if (!description.trim()) {
-        return 'Description is required';
+        return 'Description is required and should be at least 2 characters';
     }
     if (description.trim().length < 2) {
         return 'Description must be at least 2 characters';
@@ -77,7 +77,7 @@ export const validateDuration = (duration: string): string => {
 
 export const validateAuthorName = (authorName: string): string => {
     if (!authorName.trim()) {
-        return '';
+        return 'Author name should be at least 2 characters';
     }
     if (authorName.trim().length < 2 ) {
         return 'Author Name must be at least 2 characters';

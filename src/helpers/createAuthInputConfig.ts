@@ -113,5 +113,5 @@ export const createAuthorNameInputConfig = (
     type: 'text',
     placeholderText: 'Enter author name',
     value,
-    required: false
+    required: true
 });
