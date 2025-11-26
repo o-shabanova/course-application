@@ -31,7 +31,19 @@ interface CreateCourseProps {
    onAuthorDeleted?: (authorId: string) => void;
 }
 
-const CreateCourse: React.FC<CreateCourseProps> = ({onCourseCreated, authors: allAuthors = [], onAuthorCreated, onAuthorDeleted}) => {
+const CreateCourse: React.FC<CreateCourseProps> = ({
+    onCourseCreated,
+    authors,
+    onAuthorCreated,
+    onAuthorDeleted
+}) => {
+
+    const defaultAuthors: Author[] = [
+        { id: '1', name: 'John Doe' },
+        { id: '2', name: 'Jane Smith' }
+    ];
+
+    const allAuthors = authors && authors.length > 0 ? authors : defaultAuthors;
 
     const [values, setValues] = useState({
         title: '',
@@ -56,7 +68,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({onCourseCreated, authors: al
 
     const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
 
-    // Compute available authors by filtering out course authors
     const availableAuthors = allAuthors.filter(
         author => !courseAuthors.some(ca => ca.id === author.id)
     );

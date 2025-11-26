@@ -42,13 +42,13 @@ export const validateName = (name: string): string => {
 };
 
 export const validateTitle = (title: string): string => {
-    if (!title.trim()) {
-        return 'Title is required';
+    const trimmedTitle = title.trim();
+
+
+    if (trimmedTitle.length < 2) {
+        return 'Title is required and should be at least 2 characters';
     }
-    if (title.trim().length < 2) {
-        return 'Title must be at least 2 characters';
-    }
-    if (!/^[A-Za-z0-9\s]+$/.test(title.trim())) {
+    if (!/^[A-Za-z0-9\s]+$/.test(trimmedTitle)) {
         return 'Title can only contain letters, numbers and spaces';
     }
     return '';
