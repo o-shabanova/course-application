@@ -10,8 +10,8 @@ export const BUTTON_TEXT = {
     BACK: 'BACK',
     EMPTY: '',
     REGISTER: 'REGISTER',
-    ADD_AUTHOR: 'ADD AUTHOR',
-    DELETE_AUTHOR: 'DELETE AUTHOR'
+    ADD_AUTHOR: 'Add author',
+    DELETE_AUTHOR: 'Delete author'
 } as const;
 
 export const mockedCoursesList = [
