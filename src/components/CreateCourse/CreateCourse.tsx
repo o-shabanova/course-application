@@ -41,8 +41,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
 }) => {
 
     const defaultAuthors: Author[] = [
-        { id: '1', name: 'John Doe' },
-        { id: '2', name: 'Jane Smith' }
+        { id: '1', name: 'John Doe' }
     ];
 
     const allAuthors = authors && authors.length > 0 ? authors : defaultAuthors;

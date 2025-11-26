@@ -90,7 +90,7 @@ const Registration: React.FC<RegistrationProps> = ({ onNavigateToLogin }) => {
 
     return (
         <>
-        <form className="auth-container" onSubmit={handleSubmit}>
+        <form className="auth-container" onSubmit={handleSubmit} noValidate>
         <h2 className="auth-title">Registration</h2>
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
