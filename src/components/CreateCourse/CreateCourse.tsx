@@ -44,7 +44,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         { id: '1', name: 'John Doe' }
     ];
 
-    const allAuthors = authors && authors.length > 0 ? authors : defaultAuthors;
+    const initialAuthors = authors && authors.length > 0 ? authors : defaultAuthors;
+
+    const [allAuthors, setAllAuthors] = useState<Author[]>(initialAuthors);
 
     const [values, setValues] = useState({
         title: '',
@@ -79,7 +81,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         duration: generateId(),
         authorName: generateId()
     }));
-
 
     const mainInfoInputs = [
         createTitleInputConfig(inputIds.title, values.title),
@@ -119,6 +120,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 id: generateId(),
                 name: values.authorName.trim()
             };
+            setAllAuthors([...allAuthors, newAuthor]);
             if (onAuthorCreated) {
                 onAuthorCreated(newAuthor);
             }
@@ -140,6 +142,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     };
 
     const handleDeleteAuthor = (author: Author) => {
+        setAllAuthors(allAuthors.filter(a => a.id !== author.id));
         if (onAuthorDeleted) {
             onAuthorDeleted(author.id);
         }
