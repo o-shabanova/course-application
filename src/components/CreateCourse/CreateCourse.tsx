@@ -92,10 +92,10 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
 
     const onChange = handleFormChange(setValues);
 
-    // const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const numericValue = e.target.value.replace(/\D/g, '');
-    //     setValues({ ...values, duration: numericValue });
-    // };
+    const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const numericValue = e.target.value.replace(/\D/g, '');
+        setValues({ ...values, duration: numericValue });
+    };
 
     const handleBlur = (fieldName: keyof typeof values) => {
         setTouched({ ...touched, [fieldName]: true });
@@ -256,8 +256,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             <div className="duration-input-wrapper">
                 <Input 
                     {...durationInput} 
-                    // onChange={handleDurationChange}
-                    onChange={onChange}
+                    onChange={handleDurationChange}
                     hasError={!!(touched.duration && errors.duration)}
                     onFocus={() => handleFocus('duration')}
                     onBlur={() => handleBlur('duration')}
