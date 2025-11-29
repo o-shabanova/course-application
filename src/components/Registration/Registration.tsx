@@ -12,7 +12,7 @@ import { API_BASE_URL } from '../../constants';
 
 interface RegisterSuccessResponse {
     successful: true;
-    result: string; // "User was created."
+    result: string;
   }
   
   interface RegisterErrorResponse {
@@ -143,7 +143,7 @@ const Registration: React.FC = () => {
         <>
         <form className="auth-container" onSubmit={handleSubmit} noValidate>
         <h2 className="auth-title">Registration</h2>
-        {/* API-level errors from backend */}
+        
             {apiErrors.length > 0 && (
                 <ul className="api-errors">
                 {apiErrors.map((msg) => (
