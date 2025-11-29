@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import generateId from '../../helpers/generateId';
 import { Input } from '../../common/Input/Input';
@@ -8,9 +8,24 @@ import { BUTTON_TEXT } from '../../constants';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
+import { API_BASE_URL } from '../../constants';
+
+interface LoginSuccessResponse {
+    successful: true;
+    result: string; 
+  }
+  
+  interface LoginErrorResponse {
+    successful: false;
+    errors: string[];
+  }
+  
+  type LoginResponse = LoginSuccessResponse | LoginErrorResponse;
+
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -36,6 +51,10 @@ const Login: React.FC = () => {
         createPasswordInputConfig(inputIds.password, values.password)
     ];
 
+    const [loading, setLoading] = useState(false);
+    const [apiErrors, setApiErrors] = useState<string[]>([]);
+
+
     const onChange = handleFormChange(setValues);
 
     const handleBlur = (fieldName: keyof typeof values) => {
@@ -55,8 +74,10 @@ const Login: React.FC = () => {
         setTouched({ ...touched, [fieldName]: false });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
+        setApiErrors([]);
         
         const emailError = validateEmail(values.email);
         const passwordError = validatePassword(values.password);
@@ -71,9 +92,49 @@ const Login: React.FC = () => {
             password: true,
         });
 
-        if (!emailError && !passwordError) {
-            console.log(values);
-        }
+        if (emailError || passwordError) {
+            return;
+          }
+        
+          try {
+            setLoading(true);
+        
+            const response = await fetch(`${API_BASE_URL}/login`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                name: '',           
+                email: values.email,
+                password: values.password,
+              }),
+            });
+        
+            const data: LoginResponse = await response.json();
+        
+            console.log('Login status:', response.status);
+            console.log('Login data:', data);
+        
+            if (!response.ok || !data.successful) {
+              if (!data.successful && Array.isArray(data.errors)) {
+                setApiErrors(data.errors);
+              } else {
+                setApiErrors(['Login failed. Please try again.']);
+              }
+              return;
+            }
+        
+            const token = data.result;
+            localStorage.setItem('token', token);
+            console.log('token:', token);
+        
+            navigate('/');
+          } catch (err) {
+            setApiErrors(['Network error. Please try again later.']);
+          } finally {
+            setLoading(false);
+          }
     };
 
 
@@ -102,7 +163,7 @@ const Login: React.FC = () => {
                         );
                     })}
                     <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button auth-button" />
-                    <p className="auth-paragraph">If you don't have an account you may <span className="auth-link" onClick={() => navigate('/registration')}>Registration</span></p>
+                    <p className="auth-paragraph">If you don't have an account you may <Link to ="/registration" className="auth-link">Registration</Link></p>
                 </div>
             </fieldset>
         </form>
