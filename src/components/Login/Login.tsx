@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import generateId from '../../helpers/generateId';
 import { Input } from '../../common/Input/Input';
@@ -8,12 +9,8 @@ import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 
-interface LoginProps {
-    onNavigateToRegistration: () => void;
-}
-
-
-const Login: React.FC<LoginProps> = ({ onNavigateToRegistration }) => {
+const Login: React.FC = () => {
+    const navigate = useNavigate();
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -105,7 +102,7 @@ const Login: React.FC<LoginProps> = ({ onNavigateToRegistration }) => {
                         );
                     })}
                     <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button auth-button" />
-                    <p className="auth-paragraph">If you don't have an account you may <span className="auth-link" onClick={onNavigateToRegistration}>Registration</span></p>
+                    <p className="auth-paragraph">If you don't have an account you may <span className="auth-link" onClick={() => navigate('/registration')}>Registration</span></p>
                 </div>
             </fieldset>
         </form>

@@ -4,7 +4,12 @@ import Courses from './components/Courses/Courses';
 import { mockedCoursesList, mockedAuthorsList} from './constants';
 import EmptyCourseList from './components/EmptyCourseList/EmptyCourseList';
 import CreateCourse from './components/CreateCourse/CreateCourse';
+import Login from './components/Login/Login';
+import Registration from './components/Registration/Registration';
 import { Author } from './helpers/getAuthorsNames';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
+
 
 
 interface Course {
@@ -20,11 +25,9 @@ function App() {
 
   const [courses, setCourses] = useState<Course[]>(mockedCoursesList);
   const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
-  const [currentView, setCurrentView] = useState<'courses' | 'create'>('create');
 
   const handleCourseCreated = (course: Course) => {
     setCourses([...courses, course]);
-    setCurrentView('courses');
   };
 
   const handleAuthorCreated = (author: Author) => {
@@ -36,29 +39,44 @@ function App() {
   };
 
   return (
-    <>
-    <Header />
+    <BrowserRouter>
+      <Header />
       <main className="main-container">
-      {currentView === 'courses' ? (
-      (courses.length > 0) ? (
-        <Courses 
-          courses={courses} 
-          authors={authors}
-          onNavigateToCreate={() => setCurrentView('create')}
-        />
-      ) : (
-        <EmptyCourseList />
-      )
-    ) : (
-        <CreateCourse 
-          onCourseCreated={handleCourseCreated}
-          authors={authors}
-          onAuthorCreated={handleAuthorCreated}
-          onAuthorDeleted={handleAuthorDeleted}
-        />
-        )}
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route
+            path="/courses"
+            element={
+              <PrivateRoute>
+                {courses.length > 0 ? (
+                  <Courses 
+                    courses={courses} 
+                    authors={authors}
+                  />
+                ) : (
+                  <EmptyCourseList />
+                )}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/courses/add"
+            element={
+              <PrivateRoute>
+                <CreateCourse 
+                  onCourseCreated={handleCourseCreated}
+                  authors={authors}
+                  onAuthorCreated={handleAuthorCreated}
+                  onAuthorDeleted={handleAuthorDeleted}
+                />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/courses" replace />} />
+        </Routes>
       </main>
-    </>
+    </BrowserRouter>
   );
 }
 
