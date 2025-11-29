@@ -143,6 +143,14 @@ const Registration: React.FC = () => {
         <>
         <form className="auth-container" onSubmit={handleSubmit} noValidate>
         <h2 className="auth-title">Registration</h2>
+        {/* API-level errors from backend */}
+            {apiErrors.length > 0 && (
+                <ul className="api-errors">
+                {apiErrors.map((msg) => (
+                    <li key={msg}>{msg}</li>
+                ))}
+                </ul>
+            )}
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
                         {inputs.map((input) => {
@@ -163,7 +171,10 @@ const Registration: React.FC = () => {
                                 </div>
                             );
                         })}
-                    <Button buttonText={BUTTON_TEXT.REGISTER} type="submit" className="main-button auth-button" />
+                    <Button 
+                    buttonText={loading ? "Registering..." : BUTTON_TEXT.REGISTER}
+                    type="submit" 
+                    className="main-button auth-button" />
                     <p className="auth-paragraph">If you have an account you may <span className="auth-link" onClick={() => navigate('/login')}>Login</span></p>
                 </div>
             </fieldset>
