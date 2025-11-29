@@ -1,10 +1,1 @@
 @import '../../common/AuthStyles/AuthForm.css';
-
-.api-errors {
-    color: var(--error-color);
-    font-size: 14px;
-    padding: 4px;
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
-}

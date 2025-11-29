@@ -17,7 +17,7 @@ interface LoginSuccessResponse {
   
   interface LoginErrorResponse {
     successful: false;
-    errors: string[];
+    result: string;
   }
   
   type LoginResponse = LoginSuccessResponse | LoginErrorResponse;
@@ -117,8 +117,8 @@ const Login: React.FC = () => {
             console.log('Login data:', data);
         
             if (!response.ok || !data.successful) {
-              if (!data.successful && Array.isArray(data.errors)) {
-                setApiErrors(data.errors);
+                if (!data.successful && typeof data.result === 'string') {
+                    setApiErrors([data.result]);
               } else {
                 setApiErrors(['Login failed. Please try again.']);
               }
@@ -142,6 +142,13 @@ const Login: React.FC = () => {
         <>
         <form className="auth-container" onSubmit={handleSubmit} noValidate>
             <h2 className="auth-title">Login</h2>
+            {apiErrors.length > 0 && (
+                <ul className="api-errors">
+                {apiErrors.map((msg) => (
+                    <li key={msg}>{msg}</li>
+                ))}
+                </ul>
+            )}
             <fieldset className="auth-fieldset">
                 <div className="auth-content">
                     {inputs.map((input) => {
@@ -162,7 +169,11 @@ const Login: React.FC = () => {
                             </div>
                         );
                     })}
-                    <Button buttonText={BUTTON_TEXT.LOGIN} type="submit" className="main-button auth-button" />
+                    <Button 
+                        buttonText={loading ? "Logging in..." : BUTTON_TEXT.LOGIN} 
+                        type="submit" 
+                        className="main-button auth-button" 
+                    />
                     <p className="auth-paragraph">If you don't have an account you may <Link to ="/registration" className="auth-link">Registration</Link></p>
                 </div>
             </fieldset>
