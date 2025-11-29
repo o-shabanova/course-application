@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Registration.css';
 import {Input } from '../../common/Input/Input';
 import { Button } from '../../common/Button/Button';
@@ -175,7 +175,7 @@ const Registration: React.FC = () => {
                     buttonText={loading ? "Registering..." : BUTTON_TEXT.REGISTER}
                     type="submit" 
                     className="main-button auth-button" />
-                    <p className="auth-paragraph">If you have an account you may <span className="auth-link" onClick={() => navigate('/login')}>Login</span></p>
+                    <p className="auth-paragraph">If you have an account you may <Link to="/login" className="auth-link">Login</Link></p>
                 </div>
             </fieldset>
         </form>
