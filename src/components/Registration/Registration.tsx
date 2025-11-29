@@ -8,6 +8,21 @@ import generateId from '../../helpers/generateId';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateName, validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig, createNameInputConfig } from '../../helpers/createAuthInputConfig';
+import { API_BASE_URL } from '../../constants';
+
+interface RegisterSuccessResponse {
+    successful: true;
+    result: string; // "User was created."
+  }
+  
+  interface RegisterErrorResponse {
+    successful: false;
+    errors: string[];
+  }
+  
+  type RegisterResponse = RegisterSuccessResponse | RegisterErrorResponse;
+
+
 
 const Registration: React.FC = () => {
     const navigate = useNavigate();
@@ -41,6 +56,10 @@ const Registration: React.FC = () => {
         createPasswordInputConfig(inputIds.password, values.password)
     ];
 
+    const [loading, setLoading] = useState(false);
+    const [apiErrors, setApiErrors] = useState<string[]>([]);
+    
+
     const onChange = handleFormChange(setValues);
 
     const handleBlur = (fieldName: keyof typeof values) => {
@@ -62,8 +81,10 @@ const Registration: React.FC = () => {
         setTouched({ ...touched, [fieldName]: false });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        setApiErrors([]);
         
         const nameError = validateName(values.name);
         const emailError = validateEmail(values.email);
@@ -81,9 +102,41 @@ const Registration: React.FC = () => {
             password: true,
         });
 
-        if (!nameError && !emailError && !passwordError) {
-            console.log(values);
-        }
+        // If local validation failed, do not call the API
+        if (nameError || emailError || passwordError) {
+            return;
+          }
+      
+          try {
+            setLoading(true);
+      
+            const response = await fetch(`${API_BASE_URL}/register`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(values),
+            });
+      
+            const data: RegisterResponse = await response.json();
+            console.log("RAW response:", response);
+            console.log("Parsed data:", data);
+      
+            if (!response.ok || !data.successful) {
+              if (!data.successful && Array.isArray(data.errors)) {
+                setApiErrors(data.errors);
+              } else {
+                setApiErrors(['Registration failed. Please try again.']);
+              }
+              return;
+            }
+            console.log("Success result:", data.result);
+            navigate('/login');
+          } catch (err) {
+            setApiErrors(['Network error. Please try again later.']);
+          } finally {
+            setLoading(false);
+          }
     };
 
     return (
