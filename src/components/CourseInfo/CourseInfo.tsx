@@ -23,12 +23,15 @@ interface CourseInfoProps {
 
 const CourseInfo:React.FC<CourseInfoProps> = ({courses, authors = mockedAuthorsList}) => {
   const { courseId } = useParams<{ courseId: string }>();
-  const course = courses.find(c => c.id === courseId);
-  
-  if (!course || !authors) {
+  if (!courses || !authors || !courseId) {
     return null;
   }
+  const course = courses.find(c => c.id === courseId);
   
+  if (!course) {
+    return null;
+  }
+
   const formattedCourseDuration = getCourseDuration(course.duration);
   const formattedCreationDate = formatCreationDate(course.creationDate);
   
