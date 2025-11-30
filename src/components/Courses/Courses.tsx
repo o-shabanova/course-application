@@ -5,6 +5,7 @@ import {BUTTON_TEXT} from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
+import { useNavigate } from 'react-router-dom';
 
 interface Author {
     id: string;
@@ -23,10 +24,11 @@ interface Author {
   interface CoursesProps {
     courses: Course[];
     authors: Author[];
-    onNavigateToCreate?: () => void;
   }
 
-const Courses: React.FC<CoursesProps> = ({courses, authors, onNavigateToCreate}) => {
+const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
+  const navigate = useNavigate();
+  
   return (
     <div className="courses-container">
         <div className="courses-header">
@@ -35,7 +37,7 @@ const Courses: React.FC<CoursesProps> = ({courses, authors, onNavigateToCreate})
               buttonText={BUTTON_TEXT.ADD_NEW_COURSE} 
               type="button" 
               className="main-button add-new-course-button"
-              onClick={onNavigateToCreate}
+              onClick={() => navigate('/courses/add')}
             />
         </div>
         <ul className="courses-list">
