@@ -89,11 +89,7 @@ function App() {
            <Route 
             path="/" 
             element={
-              localStorage.getItem('token') ? (
                 <Navigate to="/courses" replace />
-              ) : (
-                <Navigate to="/login" replace />
-              )
             } 
           />
         </Routes>

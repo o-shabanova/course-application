@@ -13,11 +13,15 @@ import { API_BASE_URL } from '../../constants';
 interface LoginSuccessResponse {
     successful: true;
     result: string; 
+    user: {
+        email: string;
+        name: string;
+      };
   }
   
   interface LoginErrorResponse {
     successful: false;
-    result: string;
+    result: string | string[];
   }
   
   type LoginResponse = LoginSuccessResponse | LoginErrorResponse;
@@ -126,8 +130,13 @@ const Login: React.FC = () => {
             }
         
             const token = data.result;
+            const user = data.user;
+
             localStorage.setItem('token', token);
-            console.log('token:', token);
+            localStorage.setItem('user', JSON.stringify(user));
+
+            console.log("Saved token:", token);
+            console.log("Saved user:", JSON.stringify(user));
         
             navigate('/');
           } catch (err) {
