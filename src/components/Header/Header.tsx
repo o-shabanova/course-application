@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [user, setUser] = useState<{ name: string, email: string } | null>(null);
+  const [user, setUser] = useState< string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   // Check if we are on Login or Registration pages
@@ -22,22 +22,10 @@ useEffect(() => {
   const currentUser = localStorage.getItem('user');
   setIsLoggedIn(!!currentToken);
 
-  
-
-  let userName = null;
-    try {
-      userName = currentUser ? JSON.parse(currentUser).name : null;
-    } catch {
-      userName = null;
-    }
 
     setToken(currentToken);
-    
-    try {
-      setUser(currentUser ? JSON.parse(currentUser) : null);
-    } catch {
-      setUser(null);
-    }
+    setUser(currentUser);
+
 }, [location.pathname]);
 
 
@@ -55,7 +43,7 @@ useEffect(() => {
     <header className="header">
         <Logo/>
         {!isAuthPage && isLoggedIn && (
-          <span className="user-name">{user?.name}</span>
+          <span className="user-name">{user}</span>
         )}
 
         {!isAuthPage && isLoggedIn && (

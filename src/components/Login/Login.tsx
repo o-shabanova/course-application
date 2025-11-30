@@ -132,10 +132,10 @@ const Login: React.FC = () => {
             const user = data.user;
 
             localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', user.name);
 
             console.log("Saved token:", token);
-            console.log("Saved user:", JSON.stringify(user));
+            console.log("Saved user:", user.name);
         
             navigate('/');
           } catch (err) {
