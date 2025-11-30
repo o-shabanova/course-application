@@ -119,13 +119,15 @@ const Login: React.FC = () => {
             console.log('Login status:', response.status);
             console.log('Login data:', data);
         
-            if (!response.ok || !data.successful) {
-                if (!data.successful && typeof data.result === 'string') {
+            if (!data.successful) {
+                if (typeof data.result === 'string') {
                     setApiErrors([data.result]);
-              } else {
-                setApiErrors(['Login failed. Please try again.']);
-              }
-              return;
+                } else if (Array.isArray(data.result)) {
+                    setApiErrors(data.result);
+                } else {
+                    setApiErrors(['Login failed. Please try again.']);
+                }
+                return;
             }
         
             const token = data.result;
@@ -137,7 +139,7 @@ const Login: React.FC = () => {
             console.log("Saved token:", token);
             console.log("Saved user:", user.name);
         
-            navigate('/');
+            navigate('/courses');
           } catch (err) {
             setApiErrors(['Network error. Please try again later.']);
           } finally {
