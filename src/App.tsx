@@ -65,7 +65,10 @@ function App() {
               path="/courses/:courseId"
               element={
               <PrivateRoute>
-                  <CourseInfo />
+                  <CourseInfo 
+                    courses={courses} 
+                    authors={authors} 
+                  />
               </PrivateRoute>
             }
           />
