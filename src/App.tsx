@@ -73,7 +73,16 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/courses" replace />} />
+           <Route 
+            path="/" 
+            element={
+              localStorage.getItem('token') ? (
+                <Navigate to="/courses" replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            } 
+          />
         </Routes>
       </main>
     </BrowserRouter>
