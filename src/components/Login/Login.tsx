@@ -10,21 +10,21 @@ import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 import { API_BASE_URL } from '../../constants';
 
-interface LoginSuccessResponse {
-    successful: true;
-    result: string; 
-    user: {
-        email: string;
-        name: string;
-      };
-  }
+// interface LoginSuccessResponse {
+//     successful: true;
+//     result: string; 
+//     user: {
+//         email: string;
+//         name: string;
+//       };
+//   }
   
-  interface LoginErrorResponse {
-    successful: false;
-    result: string | string[];
-  }
+//   interface LoginErrorResponse {
+//     successful: false;
+//     result: string | string[];
+//   }
   
-  type LoginResponse = LoginSuccessResponse | LoginErrorResponse;
+//   type LoginResponse = LoginSuccessResponse | LoginErrorResponse;
 
 
 const Login: React.FC = () => {
@@ -114,32 +114,20 @@ const Login: React.FC = () => {
               }),
             });
         
-            const data: LoginResponse = await response.json();
+            const data = await response.json();
         
             console.log('Login status:', response.status);
             console.log('Login data:', data);
         
-            if (!data.successful) {
-                if (typeof data.result === 'string') {
-                    setApiErrors([data.result]);
-                } else if (Array.isArray(data.result)) {
-                    setApiErrors(data.result);
-                } else {
-                    setApiErrors(['Login failed. Please try again.']);
+            if (response.ok) {
+                localStorage.setItem('token', data.result);
+                if (data.user && data.user.name) {
+                    localStorage.setItem('user', data.user.name);
                 }
-                return;
+                navigate('/courses');
+            } else {
+                setApiErrors([data.message || 'Login failed. Please try again.']);
             }
-        
-            const token = data.result;
-            const user = data.user;
-
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', user.name);
-
-            console.log("Saved token:", token);
-            console.log("Saved user:", user.name);
-        
-            navigate('/courses');
           } catch (err) {
             setApiErrors(['Network error. Please try again later.']);
           } finally {
