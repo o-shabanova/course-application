@@ -32,7 +32,12 @@ useEffect(() => {
     }
 
     setToken(currentToken);
-    setUser(JSON.parse(currentUser || '{}'));
+    
+    try {
+      setUser(currentUser ? JSON.parse(currentUser) : null);
+    } catch {
+      setUser(null);
+    }
 }, [location.pathname]);
 
 
