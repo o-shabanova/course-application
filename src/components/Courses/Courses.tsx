@@ -1,11 +1,12 @@
 import React from 'react';
 import './Courses.css';
 import CourseCard from './components/CourseCard/CourseCard';
-import {BUTTON_TEXT} from '../../constants';
+import {BUTTON_TEXT, mockedCoursesList, mockedAuthorsList} from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
 import { Link } from 'react-router-dom';
+
 
 interface Author {
     id: string;
@@ -26,7 +27,7 @@ interface Author {
     authors: Author[];
   }
 
-const Courses: React.FC<CoursesProps> = ({courses = [], authors = []}) => {
+const Courses: React.FC<CoursesProps> = ({courses = mockedCoursesList, authors = mockedAuthorsList}) => {
 
   
   return (
@@ -35,7 +36,7 @@ const Courses: React.FC<CoursesProps> = ({courses = [], authors = []}) => {
             <SearchBar />
             <Link to="/courses/add">
               <Button 
-                buttonText={BUTTON_TEXT.ADD_NEW_COURSE} 
+                buttonText={BUTTON_TEXT.CREATE_COURSE} 
                 type="button" 
                 className="main-button add-new-course-button"
               />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '../../common/Button/Button';
-import { BUTTON_TEXT, mockedAuthorsList } from '../../constants';
+import { BUTTON_TEXT, mockedAuthorsList, mockedCoursesList } from '../../constants';
 import formatCreationDate from '../../helpers/formatCreationDate';
 import getCourseDuration from '../../helpers/getCourseDuration';
 import getAuthorsNames, { Author } from '../../helpers/getAuthorsNames';
@@ -21,11 +21,13 @@ interface CourseInfoProps {
   authors: Author[];
 }
 
-const CourseInfo:React.FC<CourseInfoProps> = ({courses, authors = mockedAuthorsList}) => {
+const CourseInfo:React.FC<CourseInfoProps> = ({courses = mockedCoursesList, authors = mockedAuthorsList}) => {
   const { courseId } = useParams<{ courseId: string }>();
-  if (!courses || !authors || !courseId) {
+  
+  if (!courseId || !courses) {
     return null;
   }
+  
   const course = courses.find(c => c.id === courseId);
   
   if (!course) {
@@ -54,7 +56,11 @@ const CourseInfo:React.FC<CourseInfoProps> = ({courses, authors = mockedAuthorsL
           </div>     
       </div>
       <Link to="/courses">
-        <Button buttonText={BUTTON_TEXT.BACK} type="button" className="main-button back-button" />
+        <Button 
+        buttonText={BUTTON_TEXT.BACK} 
+        type="button" 
+        className="main-button back-button" 
+        />
       </Link>
       </article>
     </main>
