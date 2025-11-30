@@ -9,6 +9,7 @@ import Registration from './components/Registration/Registration';
 import { Author } from './helpers/getAuthorsNames';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
+import CourseInfo from './components/CourseInfo/CourseInfo';
 
 
 
@@ -60,6 +61,15 @@ function App() {
               </PrivateRoute>
             }
           />
+           <Route
+              path="/courses/:courseId"
+              element={
+              <PrivateRoute>
+                  <CourseInfo />
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="/courses/add"
             element={

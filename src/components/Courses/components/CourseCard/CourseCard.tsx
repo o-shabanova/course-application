@@ -5,6 +5,7 @@ import Button from '../../../../common/Button/Button';
 import { BUTTON_TEXT } from '../../../../constants';
 import formatCreationDate from '../../../../helpers/formatCreationDate';
 import getCourseDuration from '../../../../helpers/getCourseDuration';
+import { Link } from 'react-router-dom';
 
 interface Course {
   id: string;
@@ -48,7 +49,12 @@ const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse
                         <p className="course-card-creation-date"><span className="course-card-info-label">Created:</span> {formattedCreationDate}</p>
                     </div>
                     <div className="course-card-info-item">
-                        <Button buttonText={BUTTON_TEXT.SHOW_COURSE} type="button" className="main-button course-card-button" />
+                      <Link to={`/courses/${course.id}`}>
+                          <Button buttonText={BUTTON_TEXT.SHOW_COURSE} 
+                                  type="button" 
+                                  className="main-button course-card-button" 
+                          />
+                      </Link>
                     </div>
                 </div>
             </div>

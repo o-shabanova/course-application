@@ -5,7 +5,7 @@ import {BUTTON_TEXT} from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface Author {
     id: string;
@@ -27,18 +27,19 @@ interface Author {
   }
 
 const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
-  const navigate = useNavigate();
+
   
   return (
     <div className="courses-container">
         <div className="courses-header">
             <SearchBar />
-            <Button 
-              buttonText={BUTTON_TEXT.ADD_NEW_COURSE} 
-              type="button" 
-              className="main-button add-new-course-button"
-              onClick={() => navigate('/courses/add')}
-            />
+            <Link to="/courses/add">
+              <Button 
+                buttonText={BUTTON_TEXT.ADD_NEW_COURSE} 
+                type="button" 
+                className="main-button add-new-course-button"
+              />
+            </Link>
         </div>
         <ul className="courses-list">
             {courses.map((course) => (<li key={course.id} className="course-list-item">
