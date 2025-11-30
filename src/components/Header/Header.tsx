@@ -9,11 +9,18 @@ export const Header: React.FC = () => {
   const user = localStorage.getItem('user');
   const isLoggedIn = !!token;
 
+  let userName = null;
+    try {
+      userName = user ? JSON.parse(user).name : null;
+    } catch {
+      userName = null;
+    }
+
   return (
     <header className="header">
         <Logo/>
         {isLoggedIn && user && (
-          <span className="user-name">{JSON.parse(user).name}</span>
+          <span className="user-name">{userName}</span>
         )}
         <Button buttonText={BUTTON_TEXT.LOGOUT} type="button" className="main-button login-button" />
     </header>
