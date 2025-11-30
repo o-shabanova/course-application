@@ -26,7 +26,7 @@ interface Author {
     authors: Author[];
   }
 
-const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
+const Courses: React.FC<CoursesProps> = ({courses = [], authors = []}) => {
 
   
   return (
@@ -42,8 +42,13 @@ const Courses: React.FC<CoursesProps> = ({courses, authors}) => {
             </Link>
         </div>
         <ul className="courses-list">
-            {courses.map((course) => (<li key={course.id} className="course-list-item">
-                <CourseCard key={course.id} course={course} authorNames={getAuthorsNames(course.authors, authors)} />
+            {courses.map((course) => 
+              (<li key={course.id} className="course-list-item">
+                <CourseCard 
+                  key={course.id} 
+                  course={course} 
+                  authorNames={getAuthorsNames(course.authors, authors)} 
+                  />
                 </li>
             ))}
         </ul>
