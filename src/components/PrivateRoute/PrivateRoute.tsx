@@ -7,3 +7,4 @@ const PrivateRoute: FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default PrivateRoute;
+
