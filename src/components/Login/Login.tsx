@@ -119,9 +119,11 @@ const Login: React.FC = () => {
             console.log('Login status:', response.status);
             console.log('Login data:', data);
         
-            if (!response.ok || !data.successful) {
-                if (!data.successful && typeof data.result === 'string') {
+            if (!data.successful) {
+                if (typeof data.result === 'string') {
                     setApiErrors([data.result]);
+              } else if (Array.isArray(data.result)) {
+                setApiErrors(data.result);
               } else {
                 setApiErrors(['Login failed. Please try again.']);
               }
@@ -131,13 +133,18 @@ const Login: React.FC = () => {
             const token = data.result;
             const user = data.user;
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', user.name);
+            if (token && user) {
+              localStorage.setItem('token', token);
+              localStorage.setItem('user', user.name);
 
-            console.log("Saved token:", token);
-            console.log("Saved user:", user.name);
+              console.log("Saved token:", token);
+              console.log("Saved user:", user.name);
+              console.log('data:', data);
         
-            navigate('/');
+              navigate('/courses');
+            } else {
+              setApiErrors(['Invalid response from server.']);
+            }
           } catch (err) {
             setApiErrors(['Network error. Please try again later.']);
           } finally {
