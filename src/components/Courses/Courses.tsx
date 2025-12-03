@@ -7,7 +7,7 @@ import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
 import { Link } from 'react-router-dom';
-import { RootState, AppDispatch } from '../../store';
+import { RootState, AppDispatch, store } from '../../store';
 import { setCourses } from '../../store/courses/coursesSlice';
 import { setAuthors } from '../../store/authors/authorsSlice';
 import { getCourses, getAuthors } from '../../services';
@@ -20,11 +20,21 @@ const Courses: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      const currentState = store.getState();
+      if (currentState.courses.length > 0 && currentState.authors.length > 0) {
+        return;
+      }
+
       try {
         const fetchedCourses = await getCourses();
         const fetchedAuthors = await getAuthors();
-        dispatch(setCourses(fetchedCourses));
-        dispatch(setAuthors(fetchedAuthors));
+        const stateAfterFetch = store.getState();
+        if (stateAfterFetch.courses.length === 0) {
+          dispatch(setCourses(fetchedCourses));
+        }
+        if (stateAfterFetch.authors.length === 0) {
+          dispatch(setAuthors(fetchedAuthors));
+        }
       } catch (error) {
         console.error('Failed to fetch courses or authors:', error);
       }
@@ -39,27 +49,27 @@ const Courses: React.FC = () => {
 
   return (
     <div className="courses-container">
-        <div className="courses-header">
-            <SearchBar />
-            <Link to="/courses/add">
-              <Button 
-                buttonText={BUTTON_TEXT.CREATE_COURSE} 
-                type="button" 
-                className="main-button add-new-course-button"
-              />
-            </Link>
-        </div>
-        <ul className="courses-list">
-            {courses.map((course) => 
-              (<li key={course.id} className="course-list-item">
-                <CourseCard 
-                  key={course.id} 
-                  course={course} 
-                  authorNames={getAuthorsNames(course.authors, authors)} 
-                  />
-                </li>
-            ))}
-        </ul>
+      <div className="courses-header">
+        <SearchBar />
+        <Link to="/courses/add">
+          <Button
+            buttonText={BUTTON_TEXT.CREATE_COURSE}
+            type="button"
+            className="main-button add-new-course-button"
+          />
+        </Link>
+      </div>
+      <ul className="courses-list">
+        {courses.map((course) =>
+        (<li key={course.id} className="course-list-item">
+          <CourseCard
+            key={course.id}
+            course={course}
+            authorNames={getAuthorsNames(course.authors, authors)}
+          />
+        </li>
+        ))}
+      </ul>
     </div>
   );
 };

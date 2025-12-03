@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import './CreateCourse.css';
 import Button from '../../common/Button/Button';
 import { BUTTON_TEXT } from '../../constants';
@@ -27,6 +28,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     onCancel,
 }) => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const authorsFromStore = useSelector((state: RootState) => state.authors);
 
     useEffect(() => {
@@ -207,6 +209,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             
             dispatch(addCourse(newCourse));
             resetForm();
+            navigate('/courses');
         }
     };
 

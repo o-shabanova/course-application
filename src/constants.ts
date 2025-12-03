@@ -18,6 +18,11 @@ export const BUTTON_TEXT = {
 
 export const API_BASE_URL = 'http://localhost:4000';
 
+export const ENDPOINTS = {
+    AUTHORS: 'authors',
+    COURSES: 'courses'
+} as const;
+
 export const mockedCoursesList = [
     {
       id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551ba',
