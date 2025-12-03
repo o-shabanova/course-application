@@ -20,10 +20,13 @@ const authorsSlice = createSlice({
     addAuthor(state, action: PayloadAction<Author>) {
       state.push(action.payload);
     },
+    deleteAuthor(state, action: PayloadAction<string>) {
+      return state.filter(author => author.id !== action.payload);
+    },
   },
 });
 
-export const { setAuthors, addAuthor } = authorsSlice.actions;
+export const { setAuthors, addAuthor, deleteAuthor } = authorsSlice.actions;
 
 export default authorsSlice.reducer;
 

@@ -15,26 +15,31 @@ const defaultAuthor: Author = {
     id: '1',
     name: 'John Doe'
 }
-const AuthorItem: React.FC<AuthorItemProps> = ({author = defaultAuthor, isAddButtonVisible = true, onAdd, onDelete}) => {
+const AuthorItem: React.FC<AuthorItemProps> = ({
+    author = defaultAuthor,
+    isAddButtonVisible = true,
+    onAdd,
+    onDelete
+}) => {
     return (
-            <li className="author-item">
+        <li className="author-item">
             <span className="author-name">{author.name}</span>
             {isAddButtonVisible && (
-                <Button 
-                    buttonText={BUTTON_TEXT.ADD_AUTHOR} 
-                    type="button" 
+                <Button
+                    buttonText={BUTTON_TEXT.ADD_AUTHOR}
+                    type="button"
                     className="author-item-button add-author-button"
                     onClick={onAdd}
                 />
             )}
-            <Button 
-                buttonText={BUTTON_TEXT.DELETE_AUTHOR} 
-                type="button" 
+            <Button
+                buttonText={BUTTON_TEXT.DELETE_AUTHOR}
+                type="button"
                 className="author-item-button delete-author-button"
                 onClick={onDelete}
             />
-            </li>
-        
+        </li>
+
     )
 };
 

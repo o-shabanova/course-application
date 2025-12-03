@@ -17,7 +17,7 @@ import getCurrentDate from '../../helpers/getCurrentDate';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { RootState, AppDispatch } from '../../store';
 import { addCourse, Course } from '../../store/courses/coursesSlice';
-import { addAuthor, Author, setAuthors } from '../../store/authors/authorsSlice';
+import { addAuthor, Author, setAuthors, deleteAuthor } from '../../store/authors/authorsSlice';
 import { getAuthors } from '../../services';
 
 interface CreateCourseProps {
@@ -140,8 +140,8 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
     };
 
-    const handleDeleteAuthor = (author: Author) => {
-        setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
+     const handleDeleteAuthor = (author: Author) => {
+        dispatch(deleteAuthor(author.id));
     };
 
     const durationMinutes = Number(values.duration) || 0;
