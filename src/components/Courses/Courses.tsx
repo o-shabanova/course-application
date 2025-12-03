@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Courses.css';
 import CourseCard from './components/CourseCard/CourseCard';
-import { BUTTON_TEXT, API_BASE_URL } from '../../constants';
+import { BUTTON_TEXT } from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { RootState, AppDispatch } from '../../store';
 import { setCourses } from '../../store/courses/coursesSlice';
 import { setAuthors } from '../../store/authors/authorsSlice';
+import { getCourses, getAuthors } from '../../services';
 
 const Courses: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,34 +18,18 @@ const Courses: React.FC = () => {
   const authors = useSelector((state: RootState) => state.authors);
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/courses/all`);
-        if (response.ok) {
-          const data = await response.json();
-          const courses = Array.isArray(data.result) ? data.result : [];
-          dispatch(setCourses(courses));
-        }
+        const fetchedCourses = await getCourses();
+        const fetchedAuthors = await getAuthors();
+        dispatch(setCourses(fetchedCourses));
+        dispatch(setAuthors(fetchedAuthors));
       } catch (error) {
-        console.error('Failed to fetch courses:', error);
+        console.error('Failed to fetch courses or authors:', error);
       }
     };
 
-    const fetchAuthors = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/authors/all`);
-        if (response.ok) {
-          const data = await response.json();
-          const authors = Array.isArray(data.result) ? data.result : [];
-          dispatch(setAuthors(authors));
-        }
-      } catch (error) {
-        console.error('Failed to fetch authors:', error);
-      }
-    };
-
-    fetchCourses();
-    fetchAuthors();
+    loadData();
   }, [dispatch]);
 
   return (
