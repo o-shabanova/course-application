@@ -12,23 +12,6 @@ import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers
 import { API_BASE_URL } from '../../constants';
 import { getUser } from '../../store/user/userSlice';
 
-// interface LoginSuccessResponse {
-//     successful: true;
-//     result: string; 
-//     user: {
-//         email: string;
-//         name: string;
-//       };
-//   }
-  
-//   interface LoginErrorResponse {
-//     successful: false;
-//     result: string | string[];
-//   }
-  
-//   type LoginResponse = LoginSuccessResponse | LoginErrorResponse;
-
-
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -118,9 +101,6 @@ const Login: React.FC = () => {
             });
         
             const data = await response.json();
-        
-            console.log('Login status:', response.status);
-            console.log('Login data:', data);
         
             if (response.ok) {
                 getUser(dispatch, data, values.email);

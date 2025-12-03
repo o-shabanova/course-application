@@ -14,8 +14,6 @@ export const Header: React.FC = () => {
   const dispatch = useDispatch();
   
   const { name, isAuth } = useSelector((state: RootState) => state.user);
-  
-  console.log('Header - Redux state:', { name, isAuth });
 
   const isAuthPage =
     location.pathname === '/login' ||
