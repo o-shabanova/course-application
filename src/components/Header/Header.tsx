@@ -1,52 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
 import { BUTTON_TEXT } from '../../constants';
 import './Header.css';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store';
+import { logout } from '../../store/user/userSlice';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  
+  const { name, isAuth } = useSelector((state: RootState) => state.user);
+  
+  console.log('Header - Redux state:', { name, isAuth });
 
-  const [user, setUser] = useState< string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  // Check if we are on Login or Registration pages
   const isAuthPage =
     location.pathname === '/login' ||
     location.pathname === '/registration';
 
-useEffect(() => {
-  const currentToken = localStorage.getItem('token');
-  const currentUser = localStorage.getItem('user');
-  setIsLoggedIn(!!currentToken);
-
-
-    setToken(currentToken);
-    setUser(currentUser);
-
-}, [location.pathname]);
-
-
-    const handleLogout = () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-  
-      console.log('user:', user);
-      console.log('token:', token);
-  
-      navigate('/login');
-    };
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <header className="header">
         <Logo/>
-        {!isAuthPage && isLoggedIn && (
-          <span className="user-name">{user}</span>
+        {!isAuthPage && isAuth && (
+          <span className="user-name">{name}</span>
         )}
 
-        {!isAuthPage && isLoggedIn && (
+        {!isAuthPage && isAuth && (
           <Button 
             buttonText={BUTTON_TEXT.LOGOUT} 
             type="button" 

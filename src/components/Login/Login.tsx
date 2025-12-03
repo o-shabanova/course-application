@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import './Login.css';
 import generateId from '../../helpers/generateId';
 import { Input } from '../../common/Input/Input';
@@ -9,6 +10,7 @@ import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 import { API_BASE_URL } from '../../constants';
+import { getUser } from '../../store/user/userSlice';
 
 // interface LoginSuccessResponse {
 //     successful: true;
@@ -29,6 +31,7 @@ import { API_BASE_URL } from '../../constants';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [values, setValues] = useState({
         email: '',
@@ -120,10 +123,7 @@ const Login: React.FC = () => {
             console.log('Login data:', data);
         
             if (response.ok) {
-                localStorage.setItem('token', data.result);
-                if (data.user && data.user.name) {
-                    localStorage.setItem('user', data.user.name);
-                }
+                getUser(dispatch, data, values.email);
                 navigate('/courses');
             } else {
                 setApiErrors([data.message || 'Login failed. Please try again.']);
