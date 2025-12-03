@@ -56,6 +56,18 @@ const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse
                           />
                       </Link>
                     </div>
+                    <div className="course-card-info-item">
+                        <Button buttonText={BUTTON_TEXT.DELETE_COURSE} 
+                                type="button" 
+                                className="main-button course-card-button delete" 
+                          />
+
+                        <Button buttonText={BUTTON_TEXT.UPDATE_COURSE} 
+                                type="button" 
+                                className="main-button course-card-button update" 
+                        />
+
+                    </div>
                 </div>
             </div>
         </article>

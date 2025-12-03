@@ -8,7 +8,7 @@
     flex-direction: column;
     gap: 10px;
     margin-top: 33px;
-    height: 239px;
+    min-height: 239px;
 }
 
 .course-card-title {
@@ -43,6 +43,10 @@
 
 .course-card-button {
    padding: 13px 31.5px;
+}
+
+.delete {
+    margin-right: 5px;
 }
 
 .course-card-authors {
