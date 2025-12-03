@@ -1,34 +1,25 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '../../common/Button/Button';
-import { BUTTON_TEXT, mockedAuthorsList, mockedCoursesList } from '../../constants';
+import { BUTTON_TEXT } from '../../constants';
 import formatCreationDate from '../../helpers/formatCreationDate';
 import getCourseDuration from '../../helpers/getCourseDuration';
-import getAuthorsNames, { Author } from '../../helpers/getAuthorsNames';
+import getAuthorsNames from '../../helpers/getAuthorsNames';
+import { RootState } from '../../store';
+import { Course } from '../../store/courses/coursesSlice';
 import './CourseInfo.css';
 
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
-}
-
-interface CourseInfoProps {
-  courses: Course[];
-  authors: Author[];
-}
-
-const CourseInfo:React.FC<CourseInfoProps> = ({courses = mockedCoursesList, authors = mockedAuthorsList}) => {
+const CourseInfo: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
+  const courses = useSelector((state: RootState) => state.courses);
+  const authors = useSelector((state: RootState) => state.authors);
   
   if (!courseId || !courses) {
     return null;
   }
   
-  const course = courses.find(c => c.id === courseId);
+  const course = courses.find((c: Course) => c.id === courseId);
   
   if (!course) {
     return null;

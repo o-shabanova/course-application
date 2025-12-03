@@ -11,6 +11,7 @@ import { RootState, AppDispatch } from '../../store';
 import { setCourses } from '../../store/courses/coursesSlice';
 import { setAuthors } from '../../store/authors/authorsSlice';
 import { getCourses, getAuthors } from '../../services';
+import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 
 const Courses: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +32,10 @@ const Courses: React.FC = () => {
 
     loadData();
   }, [dispatch]);
+
+  if (courses.length === 0) {
+    return <EmptyCourseList />;
+  }
 
   return (
     <div className="courses-container">
