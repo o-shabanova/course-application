@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './CreateCourse.css';
 import Button from '../../common/Button/Button';
 import { BUTTON_TEXT } from '../../constants';
@@ -13,40 +14,34 @@ import { validateTitle, validateDescription, validateDuration, validateAuthorNam
 import getCourseDuration from '../../helpers/getCourseDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
 import AuthorItem from '../AuthorItem/AuthorItem';
-import { Author } from '../../helpers/getAuthorsNames';
-
-interface Course {
-    id: string;
-    title: string;
-    description: string;
-    creationDate: string;
-    duration: number;
-    authors: string[];
-}
+import { RootState, AppDispatch } from '../../store';
+import { addCourse, Course } from '../../store/courses/coursesSlice';
+import { addAuthor, Author, setAuthors } from '../../store/authors/authorsSlice';
+import { getAuthors } from '../../services';
 
 interface CreateCourseProps {
-   onCourseCreated?: (course: Course) => void;
-   authors?: Author[];
-   onAuthorCreated?: (author: Author) => void;
-   onAuthorDeleted?: (authorId: string) => void;
    onCancel?: () => void;
 }
 
 const CreateCourse: React.FC<CreateCourseProps> = ({
-    onCourseCreated,
-    authors,
-    onAuthorCreated,
-    onAuthorDeleted,
     onCancel,
 }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const authorsFromStore = useSelector((state: RootState) => state.authors);
 
-    const defaultAuthors: Author[] = [
-        { id: '1', name: 'John Doe' }
-    ];
-
-    const initialAuthors = authors && authors.length > 0 ? authors : defaultAuthors;
-
-    const [allAuthors, setAllAuthors] = useState<Author[]>(initialAuthors);
+    useEffect(() => {
+        if (authorsFromStore.length === 0) {
+            const loadAuthors = async () => {
+                try {
+                    const fetchedAuthors = await getAuthors();
+                    dispatch(setAuthors(fetchedAuthors));
+                } catch (error) {
+                    console.error('Failed to fetch authors:', error);
+                }
+            };
+            loadAuthors();
+        }
+    }, [dispatch, authorsFromStore.length]);
 
     const [values, setValues] = useState({
         title: '',
@@ -71,7 +66,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
 
     const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
 
-    const availableAuthors = allAuthors.filter(
+    const availableAuthors = authorsFromStore.filter(
         author => !courseAuthors.some(ca => ca.id === author.id)
     );
 
@@ -125,10 +120,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 id: generateId(),
                 name: values.authorName.trim()
             };
-            setAllAuthors([...allAuthors, newAuthor]);
-            if (onAuthorCreated) {
-                onAuthorCreated(newAuthor);
-            }
+            dispatch(addAuthor(newAuthor));
             setValues({ ...values, authorName: '' });
             setTouched({ ...touched, authorName: false });
             setErrors({ ...errors, authorName: '' });
@@ -147,10 +139,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     };
 
     const handleDeleteAuthor = (author: Author) => {
-        setAllAuthors(allAuthors.filter(a => a.id !== author.id));
-        if (onAuthorDeleted) {
-            onAuthorDeleted(author.id);
-        }
         setCourseAuthors(courseAuthors.filter(a => a.id !== author.id));
     };
 
@@ -217,9 +205,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 authors: courseAuthors.map(author => author.id)
             };
             
-            if (onCourseCreated) {
-                onCourseCreated(newCourse);
-            }
+            dispatch(addCourse(newCourse));
             resetForm();
         }
     };

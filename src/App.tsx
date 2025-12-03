@@ -1,42 +1,13 @@
-import { useState } from 'react';
 import { Header } from './components/Header/Header';
 import Courses from './components/Courses/Courses';
-import { mockedCoursesList, mockedAuthorsList} from './constants';
 import CreateCourse from './components/CreateCourse/CreateCourse';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
-import { Author } from './helpers/getAuthorsNames';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 
-
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
-}
-
 function App() {
-
-  const [courses, setCourses] = useState<Course[]>(mockedCoursesList);
-  const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
-
-  const handleCourseCreated = (course: Course) => {
-    setCourses([...courses, course]);
-  };
-
-  const handleAuthorCreated = (author: Author) => {
-    setAuthors([...authors, author]);
-  };
-
-  const handleAuthorDeleted = (authorId: string) => {
-    setAuthors(authors.filter(a => a.id !== authorId));
-  };
 
   return (
     <BrowserRouter>
@@ -66,12 +37,7 @@ function App() {
             path="/courses/add"
             element={
               <PrivateRoute>
-                <CreateCourse 
-                  onCourseCreated={handleCourseCreated}
-                  authors={authors}
-                  onAuthorCreated={handleAuthorCreated}
-                  onAuthorDeleted={handleAuthorDeleted}
-                />
+                <CreateCourse />
               </PrivateRoute>
             }
           />
