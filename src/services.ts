@@ -1,7 +1,7 @@
 import { API_BASE_URL, ENDPOINTS } from './constants';
 
 
-async function getData(endpoint: string,) {
+async function getAllData(endpoint: string,) {
 
     const response = await fetch(`${API_BASE_URL}/${endpoint}/all`);
 
@@ -17,9 +17,9 @@ async function getData(endpoint: string,) {
 }
 
 export async function getCourses() {
-    return getData(ENDPOINTS.COURSES);
+    return getAllData(ENDPOINTS.COURSES);
 }
 
 export async function getAuthors() {
-    return getData(ENDPOINTS.AUTHORS);
+    return getAllData(ENDPOINTS.AUTHORS);
 }
