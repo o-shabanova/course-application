@@ -1,44 +1,35 @@
 import React from 'react';
-
+import { useDispatch } from 'react-redux';
 import './CourseCard.css';
 import Button from '../../../../common/Button/Button';
 import { BUTTON_TEXT } from '../../../../constants';
 import formatCreationDate from '../../../../helpers/formatCreationDate';
 import getCourseDuration from '../../../../helpers/getCourseDuration';
 import { Link } from 'react-router-dom';
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
-}
+import { AppDispatch } from '../../../../store';
+import { deleteCourse, Course } from '../../../../store/courses/coursesSlice';
 
 interface CourseCardProps {
   course: Course;
   authorNames?: string;
 }
 
-const defaultCourse: Course = {
-  id: '1',
-  title: 'Course Title',
-  description: 'Course Description',
-  creationDate: '01/01/2025',
-  duration: 60,
-  authors: ['27cc3006-e93a-4748-8ca8-73d06aa93b6d', 'f762978b-61eb-4096-812b-ebde22838167']
-};
+const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames = '' }) => {
+  const dispatch = useDispatch<AppDispatch>();
 
-const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse, authorNames = '' }) => {
   if (!course) {
     return null;
   }
+
+  const handleDelete = () => {
+    dispatch(deleteCourse(course.id));
+  };
+
   const formattedCreationDate = formatCreationDate(course.creationDate);
   const formattedCourseDuration = getCourseDuration(course.duration);
+
   return (
     <article className="course-card">
-
       <h1 className="course-card-title">{course.title}</h1>
       <div className="course-card-content">
         <p className="course-card-description">{course.description}</p>
@@ -57,16 +48,17 @@ const CourseCard: React.FC<Partial<CourseCardProps>> = ({ course = defaultCourse
             </Link>
           </div>
           <div className="course-card-info-item">
-            <Button buttonText={BUTTON_TEXT.DELETE_COURSE}
+            <Button 
+              buttonText={BUTTON_TEXT.DELETE_COURSE}
               type="button"
               className="main-button course-card-button delete"
+              onClick={handleDelete}
             />
-
-            <Button buttonText={BUTTON_TEXT.UPDATE_COURSE}
+            <Button 
+              buttonText={BUTTON_TEXT.UPDATE_COURSE}
               type="button"
               className="main-button course-card-button update"
             />
-
           </div>
         </div>
       </div>
