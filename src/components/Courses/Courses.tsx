@@ -7,7 +7,7 @@ import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
 import { Link } from 'react-router-dom';
-import { RootState, AppDispatch, store } from '../../store';
+import { RootState, AppDispatch } from '../../store';
 import { setCourses } from '../../store/courses/coursesSlice';
 import { setAuthors } from '../../store/authors/authorsSlice';
 import { getCourses, getAuthors } from '../../services';
@@ -20,19 +20,17 @@ const Courses: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const currentState = store.getState();
-      if (currentState.courses.length > 0 && currentState.authors.length > 0) {
+      if (courses.length > 0 && authors.length > 0) {
         return;
       }
 
       try {
-        const fetchedCourses = await getCourses();
-        const fetchedAuthors = await getAuthors();
-        const stateAfterFetch = store.getState();
-        if (stateAfterFetch.courses.length === 0) {
+        if (courses.length === 0) {
+          const fetchedCourses = await getCourses();
           dispatch(setCourses(fetchedCourses));
         }
-        if (stateAfterFetch.authors.length === 0) {
+        if (authors.length === 0) {
+          const fetchedAuthors = await getAuthors();
           dispatch(setAuthors(fetchedAuthors));
         }
       } catch (error) {
@@ -41,7 +39,7 @@ const Courses: React.FC = () => {
     };
 
     loadData();
-  }, [dispatch]);
+  }, [dispatch, courses.length, authors.length]);
 
   if (courses.length === 0) {
     return <EmptyCourseList />;
