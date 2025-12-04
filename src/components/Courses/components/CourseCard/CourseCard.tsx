@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import './CourseCard.css';
 import Button from '../../../../common/Button/Button';
 import { BUTTON_TEXT } from '../../../../constants';
@@ -8,8 +8,6 @@ import getCourseDuration from '../../../../helpers/getCourseDuration';
 import { Link } from 'react-router-dom';
 import { AppDispatch } from '../../../../store';
 import { deleteCourse, Course } from '../../../../store/courses/coursesSlice';
-import { RootState } from '../../../../store';
-import { deleteCourseById } from '../../../../services';
 
 interface CourseCardProps {
   course: Course;
@@ -19,25 +17,13 @@ interface CourseCardProps {
 const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames = '' }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-
   if (!course) {
     return null;
   }
 
-  const handleDelete = async () => {
-    try {
-      const token = localStorage.getItem('token') ?? '';
-      const response = await deleteCourseById(course.id, token);
-      if (response.ok) {
-        dispatch(deleteCourse(course.id));
-      } else {
-        console.error('Failed to delete course');
-      }
-    } catch (error) {
-      console.error('Failed to delete course:', error);
-    }
+  const handleDelete = () => {
+    dispatch(deleteCourse(course.id));
   };
-
 
   const formattedCreationDate = formatCreationDate(course.creationDate);
   const formattedCourseDuration = getCourseDuration(course.duration);

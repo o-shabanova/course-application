@@ -16,23 +16,6 @@ async function getAllData(endpoint: string,) {
     return result;
 }
 
-export async function deleteCourseById(courseId: string, token: string) {
-
-    const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.COURSES}/${courseId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `${token}`,
-        },
-    });
-
-
-    if (!response.ok) {
-        throw new Error(`Failed to delete course, status: ${response.status}`);
-    }
-
-    return response;
-}
-
 export async function getCourses() {
     return getAllData(ENDPOINTS.COURSES);
 }
