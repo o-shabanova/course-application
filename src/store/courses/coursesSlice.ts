@@ -19,7 +19,7 @@ const coursesSlice = createSlice({
   initialState,
   reducers: {
     setCourses(_state, action: PayloadAction<Course[]>) {
-      return action.payload;
+      return Array.isArray(action.payload) ? action.payload : [];
     },
     addCourse(state, action: PayloadAction<Course>) {
       state.push(action.payload);

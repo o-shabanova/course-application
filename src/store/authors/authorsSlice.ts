@@ -15,7 +15,7 @@ const authorsSlice = createSlice({
   initialState,
   reducers: {
     setAuthors(_state, action: PayloadAction<Author[]>) {
-      return action.payload;
+      return Array.isArray(action.payload) ? action.payload : [];
     },
     addAuthor(state, action: PayloadAction<Author>) {
       state.push(action.payload);
