@@ -14,31 +14,31 @@ import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 
 const Courses: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const coursesStore = useSelector((state: RootState) => state.courses);
+  const courses = useSelector((state: RootState) => state.courses);
   const authors = useSelector((state: RootState) => state.authors);
 
-  const courses = Array.isArray(coursesStore) ? coursesStore : [];
-
   useEffect(() => {
-    let isMounted = true;
-    (async () => {
-        try {
-            if (courses.length === 0) {
-                const fetchedCourses = await getCourses();
-                if (isMounted) dispatch(setCourses(fetchedCourses));
-            }
-            if (authors.length === 0) {
-                const fetchedAuthors = await getAuthors();
-                if (isMounted) dispatch(setAuthors(fetchedAuthors));
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
+    const loadData = async () => {
+      if (courses.length > 0 && authors.length > 0) {
+        return;
+      }
+
+      try {
+        if (courses.length === 0) {
+          const fetchedCourses = await getCourses();
+          dispatch(setCourses(fetchedCourses));
         }
-    })();
-    return () => {
-        isMounted = false;
+        if (authors.length === 0) {
+          const fetchedAuthors = await getAuthors();
+          dispatch(setAuthors(fetchedAuthors));
+        }
+      } catch (error) {
+        console.error('Failed to fetch courses or authors:', error);
+      }
     };
-}, []);
+
+    loadData();
+  }, []);
 
   if (courses.length === 0) {
     return <EmptyCourseList />;
