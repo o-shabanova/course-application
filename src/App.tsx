@@ -17,6 +17,16 @@ function App() {
       <Header />
       <main className="main-container">
         <Routes>
+        <Route 
+            path="/" 
+            element={
+                isAuth ? (
+                  <Navigate to="/courses" replace />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+            } 
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route
@@ -43,16 +53,6 @@ function App() {
                 <CreateCourse />
               </PrivateRoute>
             }
-          />
-           <Route 
-            path="/" 
-            element={
-                isAuth ? (
-                  <Navigate to="/courses" replace />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
-            } 
           />
         </Routes>
       </main>
