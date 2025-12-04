@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Courses.css';
 import CourseCard from './components/CourseCard/CourseCard';
@@ -17,16 +17,10 @@ const Courses: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const courses = useSelector((state: RootState) => state.courses);
   const authors = useSelector((state: RootState) => state.authors);
-  const hasLoadedRef = useRef(false);
 
   useEffect(() => {
     const loadData = async () => {
-      if (hasLoadedRef.current) {
-        return;
-      }
-
       if (courses.length > 0 && authors.length > 0) {
-        hasLoadedRef.current = true;
         return;
       }
 
@@ -39,14 +33,13 @@ const Courses: React.FC = () => {
           const fetchedAuthors = await getAuthors();
           dispatch(setAuthors(fetchedAuthors));
         }
-        hasLoadedRef.current = true;
       } catch (error) {
         console.error('Failed to fetch courses or authors:', error);
       }
     };
 
     loadData();
-  }, [dispatch]);
+  }, [dispatch, courses.length, authors.length]);
 
   if (courses.length === 0) {
     return <EmptyCourseList />;
