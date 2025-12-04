@@ -59,8 +59,18 @@ const userSlice = createSlice({
 export const { loginSuccess, logout } = userSlice.actions;
 
 export const getUser = (dispatch: Dispatch, responseData: LoginResponse, email?: string) => {
+  if (!responseData || typeof responseData !== 'object') {
+    console.error('Invalid response data:', responseData);
+    return;
+  }
+
   const token = responseData.result;
   const userData = responseData.user;
+  
+  if (!token) {
+    console.error('No token in response');
+    return;
+  }
   
   const userName = userData?.name || '';
   const userEmail = userData?.email || email || '';

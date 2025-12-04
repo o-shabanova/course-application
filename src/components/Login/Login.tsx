@@ -100,7 +100,22 @@ const Login: React.FC = () => {
               }),
             });
         
-            const data = await response.json();
+            let data;
+            try {
+              const text = await response.text();
+              if (!text) {
+                data = {};
+              } else {
+                try {
+                  data = JSON.parse(text);
+                } catch {
+                  data = { result: text };
+                }
+              }
+            } catch (error) {
+              setApiErrors(['Invalid response from server. Please try again.']);
+              return;
+            }
         
             if (response.ok) {
                 getUser(dispatch, data, values.email);
