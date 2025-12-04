@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './Login.css';
 import generateId from '../../helpers/generateId';
 import { Input } from '../../common/Input/Input';
@@ -10,11 +10,18 @@ import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
 import { API_BASE_URL } from '../../constants';
-import { getUser } from '../../store/user/userSlice';
+import { login } from '../../store/user/userSlice';
+import { RootState } from '@/store';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isTokenExist = useSelector((state: RootState) => state.user.isAuth);
+    useEffect(() => {
+        if (isTokenExist) {
+            navigate('/courses');
+        }
+    }, [isTokenExist, navigate]);
 
     const [values, setValues] = useState({
         email: '',
@@ -100,28 +107,26 @@ const Login: React.FC = () => {
               }),
             });
         
-            let data;
-            try {
-              const text = await response.text();
-              if (!text) {
-                data = {};
-              } else {
-                try {
-                  data = JSON.parse(text);
-                } catch {
-                  data = { result: text };
-                }
-              }
-            } catch (error) {
-              setApiErrors(['Invalid response from server. Please try again.']);
-              return;
-            }
-        
+            const result = await response.json();
             if (response.ok) {
-                getUser(dispatch, data, values.email);
-                navigate('/courses');
+                const token = result.result;
+                const name = result.user?.name || "";
+                const email = result.user?.email || values.email;
+
+                localStorage.setItem("token", token);
+
+                if (name) {
+                    localStorage.setItem("user", name);
+                }
+                localStorage.setItem("user", JSON.stringify({ name, email }));
+
+                dispatch(login({ name, email, token }));
+
+                setValues({ email: "", password: "" });
+                setErrors({ email: "", password: "" });
+                navigate("/courses");
             } else {
-                setApiErrors([data.message || 'Login failed. Please try again.']);
+                setApiErrors([result.message || 'Login failed. Please try again.']);
             }
           } catch (err) {
             setApiErrors(['Network error. Please try again later.']);
