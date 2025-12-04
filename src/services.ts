@@ -1,5 +1,4 @@
 import { API_BASE_URL, ENDPOINTS } from './constants';
-import { Course } from './store/courses/coursesSlice';
 
 
 async function getAllData(endpoint: string,) {
@@ -31,22 +30,6 @@ export async function deleteCourseById(courseId: string, token: string) {
         throw new Error(`Failed to delete course, status: ${response.status}`);
     }
 
-    return response;
-}
-
-export async function postCourse(course: Course, token: string) {
-    const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.COURSES}/add`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `${token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(course),
-    });
-
-    if(!response.ok) {
-        throw new Error(`Failed to create course, status: ${response.status}`);
-    }
     return response;
 }
 

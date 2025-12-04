@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './CourseCard.css';
 import Button from '../../../../common/Button/Button';
 import { BUTTON_TEXT } from '../../../../constants';
@@ -8,6 +8,7 @@ import getCourseDuration from '../../../../helpers/getCourseDuration';
 import { Link } from 'react-router-dom';
 import { AppDispatch } from '../../../../store';
 import { deleteCourse, Course } from '../../../../store/courses/coursesSlice';
+import { RootState } from '../../../../store';
 import { deleteCourseById } from '../../../../services';
 
 interface CourseCardProps {
