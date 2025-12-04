@@ -18,7 +18,7 @@ import AuthorItem from '../AuthorItem/AuthorItem';
 import { RootState, AppDispatch } from '../../store';
 import { addCourse, Course } from '../../store/courses/coursesSlice';
 import { addAuthor, Author, setAuthors, deleteAuthor } from '../../store/authors/authorsSlice';
-import { getAuthors } from '../../services';
+import { getAuthors, postCourse } from '../../services';
 
 interface CreateCourseProps {
    onCancel?: () => void;
@@ -176,7 +176,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         resetForm();
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         const titleError = validateTitle(values.title);
@@ -206,10 +206,15 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
                 duration: Number(values.duration),
                 authors: courseAuthors.map(author => author.id)
             };
-            
-            dispatch(addCourse(newCourse));
-            resetForm();
-            navigate('/courses');
+            const token = localStorage.getItem('token') ?? '';
+            const response = await postCourse(newCourse, token);
+            if (response.ok) {
+                dispatch(addCourse(newCourse));
+                resetForm();
+                navigate('/courses');
+            } else {
+                console.error('Failed to create course');
+            }
         }
     };
 
