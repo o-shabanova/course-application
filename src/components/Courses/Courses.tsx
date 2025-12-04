@@ -39,7 +39,7 @@ const Courses: React.FC = () => {
     };
 
     loadData();
-  }, [dispatch, courses.length, authors.length]);
+  }, []);
 
   if (courses.length === 0) {
     return <EmptyCourseList />;
