@@ -3,14 +3,17 @@ import Courses from './components/Courses/Courses';
 import CreateCourse from './components/CreateCourse/CreateCourse';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import CourseInfo from './components/CourseInfo/CourseInfo';
+import { useSelector } from 'react-redux';
+import { RootState } from './store';
 
 function App() {
+  const isAuth = useSelector((state: RootState) => state.user.isAuth);
 
   return (
-    <BrowserRouter>
+    <>
       <Header />
       <main className="main-container">
         <Routes>
@@ -44,12 +47,16 @@ function App() {
            <Route 
             path="/" 
             element={
-                <Navigate to="/courses" replace />
+                isAuth ? (
+                  <Navigate to="/courses" replace />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
             } 
           />
         </Routes>
       </main>
-    </BrowserRouter>
+    </>
   );
 }
 
