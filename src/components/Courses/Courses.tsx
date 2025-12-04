@@ -4,7 +4,6 @@ import './Courses.css';
 import CourseCard from './components/CourseCard/CourseCard';
 import { BUTTON_TEXT } from '../../constants';
 import Button from '../../common/Button/Button';
-import SearchBar from './components/SearchBar/SearchBar';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
 import { Link } from 'react-router-dom';
 import { RootState, AppDispatch } from '../../store';
@@ -48,7 +47,6 @@ const Courses: React.FC = () => {
   return (
     <div className="courses-container">
       <div className="courses-header">
-        <SearchBar />
         <Link to="/courses/add">
           <Button
             buttonText={BUTTON_TEXT.CREATE_COURSE}
