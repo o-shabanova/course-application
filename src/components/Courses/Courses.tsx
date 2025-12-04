@@ -11,6 +11,7 @@ import { setCourses } from '../../store/courses/coursesSlice';
 import { setAuthors } from '../../store/authors/authorsSlice';
 import { getCourses, getAuthors } from '../../services';
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
+import SearchBar from './components/SearchBar/SearchBar';
 
 const Courses: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -47,6 +48,7 @@ const Courses: React.FC = () => {
   return (
     <div className="courses-container">
       <div className="courses-header">
+        <SearchBar />
         <Link to="/courses/add">
           <Button
             buttonText={BUTTON_TEXT.CREATE_COURSE}
