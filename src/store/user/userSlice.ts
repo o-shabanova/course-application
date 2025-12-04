@@ -38,7 +38,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: getInitialState(),
   reducers: {
-    loginSuccess(state, action: PayloadAction<LoginPayload>) {
+    login(state, action: PayloadAction<LoginPayload>) {
       state.isAuth = true;
       state.name = action.payload.name;
       state.email = action.payload.email;
@@ -56,7 +56,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { loginSuccess, logout } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
 export const getUser = (dispatch: Dispatch, responseData: LoginResponse, email?: string) => {
   const token = responseData?.result || '';
@@ -74,7 +74,7 @@ export const getUser = (dispatch: Dispatch, responseData: LoginResponse, email?:
     localStorage.setItem('userEmail', email);
   }
 
-  dispatch(loginSuccess({
+  dispatch(login({
     name: userData?.name || '',
     email: userData?.email || email || '',
     token,
