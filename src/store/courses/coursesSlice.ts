@@ -24,13 +24,19 @@ const coursesSlice = createSlice({
     addCourse(state, action: PayloadAction<Course>) {
       state.push(action.payload);
     },
+    updateCourse(state, action: PayloadAction<Course>) {
+      const index = state.findIndex((course) => course.id === action.payload.id);
+      if (index !== -1) {
+        state[index] = action.payload;
+      }
+    },
     deleteCourse(state, action: PayloadAction<string>) {
       return state.filter((course) => course.id !== action.payload);
     },
   },
 });
 
-export const { setCourses, addCourse, deleteCourse } = coursesSlice.actions;
+export const { setCourses, addCourse, updateCourse, deleteCourse } = coursesSlice.actions;
 
 export default coursesSlice.reducer;
 
