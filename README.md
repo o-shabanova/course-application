@@ -1,3 +1,4 @@
 ## Things to improve or add
 - Add responsive design
-- Add dark/light theme, using useContext
+- Add dark/light theme
+- Rewrite form with useForm hook
