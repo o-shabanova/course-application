@@ -10,9 +10,15 @@ async function getAllData(endpoint: string,) {
     }
 
     const data = await response.json();
-    const result = Array.isArray(data.result)
-        ? data.result
-        : (Array.isArray(data) ? data : []);
+
+    let result = [];
+
+    if (Array.isArray(data?.result)) {
+        result = data.result;
+    } else if (Array.isArray(data)) {
+        result = data;
+    }
+
     return result;
 }
 
