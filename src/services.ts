@@ -1,5 +1,37 @@
 import { API_BASE_URL, ENDPOINTS } from './constants';
 
+export type LoginCredentials = {
+    email: string;
+    password: string;
+};
+
+export type LoginResult = {
+    token: string;
+    name: string;
+    email: string;
+};
+
+export async function loginUser(credentials: LoginCredentials): Promise<LoginResult> {
+    const response = await fetch(`${API_BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.message || 'Login failed. Please try again.');
+    }
+
+    return {
+        token: result.result,
+        name: result.user?.name || '',
+        email: result.user?.email || credentials.email,
+    };
+}
 
 async function getAllData(endpoint: string,) {
 

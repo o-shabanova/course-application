@@ -9,7 +9,7 @@ import { BUTTON_TEXT } from '../../constants';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
-import { API_BASE_URL } from '../../constants';
+import { loginUser } from '../../services';
 import { login } from '../../store/user/userSlice';
 import { RootState } from '@/store';
 
@@ -95,41 +95,22 @@ const Login: React.FC = () => {
         
           try {
             setLoading(true);
-        
-            const response = await fetch(`${API_BASE_URL}/login`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({          
+
+            const { token, name, email } = await loginUser({
                 email: values.email,
                 password: values.password,
-              }),
             });
-        
-            const result = await response.json();
-            if (response.ok) {
-                const token = result.result;
-                const name = result.user?.name || "";
-                const email = result.user?.email || values.email;
 
-                localStorage.setItem("token", token);
+            dispatch(login({ name, email, token }));
 
-                if (name) {
-                    localStorage.setItem("user", name);
-                }
-                localStorage.setItem("user", JSON.stringify({ name, email }));
-
-                dispatch(login({ name, email, token }));
-
-                setValues({ email: "", password: "" });
-                setErrors({ email: "", password: "" });
-                navigate("/courses");
-            } else {
-                setApiErrors([result.message || 'Login failed. Please try again.']);
-            }
+            setValues({ email: "", password: "" });
+            setErrors({ email: "", password: "" });
+            navigate("/courses");
           } catch (err) {
-            setApiErrors(['Network error. Please try again later.']);
+            const message = err instanceof Error
+                ? err.message
+                : 'Network error. Please try again later.';
+            setApiErrors([message]);
           } finally {
             setLoading(false);
           }
