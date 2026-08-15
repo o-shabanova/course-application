@@ -21,6 +21,21 @@ export type RegisterResult = {
     result: string;
 };
 
+type LoginApiResponse = {
+    result: string;
+    user?: {
+        name?: string;
+        email?: string;
+    };
+    message?: string;
+};
+
+type RegisterApiResponse = {
+    successful: boolean;
+    result?: string;
+    errors?: string[];
+};
+
 export class RegistrationError extends Error {
     errors: string[];
 
@@ -30,16 +45,22 @@ export class RegistrationError extends Error {
     }
 }
 
-export async function registerUser(credentials: RegisterCredentials): Promise<RegisterResult> {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+async function postJson<T>(endpoint: string, body: unknown): Promise<{ response: Response; data: T }> {
+    const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const data: T = await response.json();
+
+    return { response, data };
+}
+
+export async function registerUser(credentials: RegisterCredentials): Promise<RegisterResult> {
+    const { response, data } = await postJson<RegisterApiResponse>(ENDPOINTS.REGISTER, credentials);
 
     if (!response.ok || !data.successful) {
         if (!data.successful && Array.isArray(data.errors)) {
@@ -49,33 +70,24 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Re
         throw new Error('Registration failed. Please try again.');
     }
 
-    return { result: data.result };
+    return { result: data.result ?? '' };
 }
 
 export async function loginUser(credentials: LoginCredentials): Promise<LoginResult> {
-    const response = await fetch(`${API_BASE_URL}/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-    });
-
-    const result = await response.json();
+    const { response, data } = await postJson<LoginApiResponse>(ENDPOINTS.LOGIN, credentials);
 
     if (!response.ok) {
-        throw new Error(result.message || 'Login failed. Please try again.');
+        throw new Error(data.message || 'Login failed. Please try again.');
     }
 
     return {
-        token: result.result,
-        name: result.user?.name || '',
-        email: result.user?.email || credentials.email,
+        token: data.result,
+        name: data.user?.name || '',
+        email: data.user?.email || credentials.email,
     };
 }
 
-async function getAllData(endpoint: string,) {
-
+async function getAllData(endpoint: string) {
     const response = await fetch(`${API_BASE_URL}/${endpoint}/all`);
 
     if (!response.ok) {
