@@ -174,6 +174,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             onCancel();
         }
         resetForm();
+        navigate('/courses');
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
