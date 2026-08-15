@@ -8,21 +8,7 @@ import generateId from '../../helpers/generateId';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateName, validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig, createNameInputConfig } from '../../helpers/createAuthInputConfig';
-import { API_BASE_URL } from '../../constants';
-
-interface RegisterSuccessResponse {
-    successful: true;
-    result: string;
-  }
-  
-  interface RegisterErrorResponse {
-    successful: false;
-    errors: string[];
-  }
-  
-  type RegisterResponse = RegisterSuccessResponse | RegisterErrorResponse;
-
-
+import { registerUser, RegistrationError } from '../../services';
 
 const Registration: React.FC = () => {
     const navigate = useNavigate();
@@ -109,31 +95,18 @@ const Registration: React.FC = () => {
       
           try {
             setLoading(true);
-      
-            const response = await fetch(`${API_BASE_URL}/register`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(values),
-            });
-      
-            const data: RegisterResponse = await response.json();
-            console.log("RAW response:", response);
-            console.log("Parsed data:", data);
-      
-            if (!response.ok || !data.successful) {
-              if (!data.successful && Array.isArray(data.errors)) {
-                setApiErrors(data.errors);
-              } else {
-                setApiErrors(['Registration failed. Please try again.']);
-              }
-              return;
-            }
-            console.log("Success result:", data.result);
+
+            await registerUser(values);
             navigate('/login');
           } catch (err) {
-            setApiErrors(['Network error. Please try again later.']);
+            if (err instanceof RegistrationError) {
+                setApiErrors(err.errors);
+            } else {
+                const message = err instanceof Error
+                    ? err.message
+                    : 'Network error. Please try again later.';
+                setApiErrors([message]);
+            }
           } finally {
             setLoading(false);
           }

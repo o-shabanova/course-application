@@ -11,6 +11,47 @@ export type LoginResult = {
     email: string;
 };
 
+export type RegisterCredentials = {
+    name: string;
+    email: string;
+    password: string;
+};
+
+export type RegisterResult = {
+    result: string;
+};
+
+export class RegistrationError extends Error {
+    errors: string[];
+
+    constructor(errors: string[]) {
+        super(errors.join(', '));
+        this.errors = errors;
+    }
+}
+
+export async function registerUser(credentials: RegisterCredentials): Promise<RegisterResult> {
+    const response = await fetch(`${API_BASE_URL}/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.successful) {
+        if (!data.successful && Array.isArray(data.errors)) {
+            throw new RegistrationError(data.errors);
+        }
+
+        throw new Error('Registration failed. Please try again.');
+    }
+
+    return { result: data.result };
+}
+
 export async function loginUser(credentials: LoginCredentials): Promise<LoginResult> {
     const response = await fetch(`${API_BASE_URL}/login`, {
         method: 'POST',
