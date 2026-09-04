@@ -1,6 +1,6 @@
 import { Header } from './components/Header/Header';
 import Courses from './components/Courses/Courses';
-import CreateCourse from './components/CreateCourse/CreateCourse';
+import CreateCourse from './components/CourseForm/CourseForm';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import { Routes, Route, Navigate } from 'react-router-dom';

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import './CreateCourse.css';
+import './CourseForm.css';
 import Button from '../../common/Button/Button';
 import { BUTTON_TEXT } from '../../constants';
 import { Input } from '../../common/Input/Input';
