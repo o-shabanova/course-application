@@ -1,0 +1,100 @@
+@import '../../common/AuthStyles/AuthForm.css';
+
+.create-course-container {
+    max-width: 1104px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.create-course-title {
+    margin-bottom: 45px;
+    line-height: var(--line-height-small);
+    font-weight: var(--font-weight-bold);
+    font-size: 32px;
+}
+
+.create-course-fieldset {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 825px;
+    padding: 42px 80px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--color-white);
+}
+
+.create-course-subtitle,
+.duration-subtitle,
+.authors-subtitle,
+.authors-list-subtitle,
+.course-authors-subtitle {
+    margin-bottom: 24px;
+}
+
+.description-input input[type="text"] {
+    height: 152px;
+}
+
+.duration-input-wrapper {
+    display: flex;
+    gap: 5%;
+    align-items: flex-end;
+}
+
+.duration-input {
+    width: 40%;
+}
+
+.duration-display {
+    align-self: center;
+}
+
+.authors-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.authors-left {
+    width: 65%;
+}
+
+.create-authors-wrapper {
+    width: 100%;
+}
+
+.author-input-wrapper {
+    display: flex;
+    gap: 5%;
+    align-items: flex-start;
+}
+
+.author-name-input {
+    width: 62%;
+}
+
+.authors-list-ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.create-author-button {
+    margin-top: 22px;
+}
+
+.create-course-buttons-container {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5%;
+    margin-top: 32px;
+}
+
+.create-course-button {
+    padding: 13px 29px;
+}
+
+.cancel-button {
+    padding: 13px 61px;
+}

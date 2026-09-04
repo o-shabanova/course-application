@@ -7,6 +7,7 @@ export default {
     "./src",
     "./test",
   ],
+  moduleNameMapper: {'^@/(.*)$': '<rootDir>/src/$1',},
   testEnvironment: "jsdom",
   moduleFileExtensions: [
     "js",
@@ -27,6 +28,7 @@ export default {
   transformIgnorePatterns: [
     "node_modules/(?!(hex-rgb))"
   ],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",

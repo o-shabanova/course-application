@@ -1,0 +1,10 @@
+.courses-container {
+    width: 78%;
+    margin: 0 auto;
+}
+
+.courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
