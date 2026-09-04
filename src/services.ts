@@ -87,7 +87,7 @@ export async function loginUser(credentials: LoginCredentials): Promise<LoginRes
     };
 }
 
-async function getAllData(endpoint: string) {
+async function getAllData<T>(endpoint: string): Promise<T[]> {
     const response = await fetch(`${API_BASE_URL}/${endpoint}/all`);
 
     if (!response.ok) {
@@ -96,21 +96,21 @@ async function getAllData(endpoint: string) {
 
     const data = await response.json();
 
-    let result = [];
-
     if (Array.isArray(data?.result)) {
-        result = data.result;
-    } else if (Array.isArray(data)) {
-        result = data;
+        return data.result;
     }
 
-    return result;
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    return [];
 }
 
-export async function getCourses() {
-    return getAllData(ENDPOINTS.COURSES);
+export async function getCourses<T = unknown>() {
+    return getAllData<T>(ENDPOINTS.COURSES);
 }
 
-export async function getAuthors() {
-    return getAllData(ENDPOINTS.AUTHORS);
+export async function getAuthors<T = unknown>() {
+    return getAllData<T>(ENDPOINTS.AUTHORS);
 }

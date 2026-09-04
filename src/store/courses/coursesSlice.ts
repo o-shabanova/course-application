@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { logout } from '../user/userSlice';
 
 
 export type Course = {
@@ -33,6 +34,9 @@ const coursesSlice = createSlice({
     deleteCourse(state, action: PayloadAction<string>) {
       return state.filter((course) => course.id !== action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(logout, () => []);
   },
 });
 

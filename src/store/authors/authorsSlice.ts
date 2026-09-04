@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { logout } from '../user/userSlice';
 
 
 export type Author = {
@@ -23,6 +24,9 @@ const authorsSlice = createSlice({
     deleteAuthor(state, action: PayloadAction<string>) {
       return state.filter(author => author.id !== action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(logout, () => []);
   },
 });
 

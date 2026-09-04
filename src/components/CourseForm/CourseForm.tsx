@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './CourseForm.css';
@@ -17,8 +17,7 @@ import getCurrentDate from '../../helpers/getCurrentDate';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { RootState, AppDispatch } from '../../store';
 import { addCourse, Course } from '../../store/courses/coursesSlice';
-import { addAuthor, Author, setAuthors, deleteAuthor } from '../../store/authors/authorsSlice';
-import { getAuthors } from '../../services';
+import { addAuthor, Author, deleteAuthor } from '../../store/authors/authorsSlice';
 
 interface CreateCourseProps {
    onCancel?: () => void;
@@ -30,20 +29,6 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const authorsFromStore = useSelector((state: RootState) => state.authors);
-
-    useEffect(() => {
-        if (authorsFromStore.length === 0) {
-            const loadAuthors = async () => {
-                try {
-                    const fetchedAuthors = await getAuthors();
-                    dispatch(setAuthors(fetchedAuthors));
-                } catch (error) {
-                    console.error('Failed to fetch authors:', error);
-                }
-            };
-            loadAuthors();
-        }
-    }, [dispatch, authorsFromStore.length]);
 
     const [values, setValues] = useState({
         title: '',

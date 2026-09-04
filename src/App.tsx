@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Header } from './components/Header/Header';
 import Courses from './components/Courses/Courses';
 import CreateCourse from './components/CourseForm/CourseForm';
@@ -6,11 +7,23 @@ import Registration from './components/Registration/Registration';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import CourseInfo from './components/CourseInfo/CourseInfo';
-import { useSelector } from 'react-redux';
-import { RootState } from './store';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from './store';
+import { loadCourses } from './store/courses/thunk';
+import { loadAuthors } from './store/authors/thunk';
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
   const isAuth = useSelector((state: RootState) => state.user.isAuth);
+
+  useEffect(() => {
+    if (!isAuth) {
+      return;
+    }
+
+    dispatch(loadCourses());
+    dispatch(loadAuthors());
+  }, [isAuth, dispatch]);
 
   return (
     <>
