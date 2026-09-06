@@ -11,10 +11,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from './store';
 import { loadCourses } from './store/courses/thunk';
 import { loadAuthors } from './store/authors/thunk';
+import { loadCurrentUser } from './store/user/thunk';
+import { USER_ROLE } from './constants';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const isAuth = useSelector((state: RootState) => state.user.isAuth);
+  const { isAuth, token, role } = useSelector((state: RootState) => state.user);
+  const isAdmin = role.toLowerCase() === USER_ROLE.ADMIN;
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    dispatch(loadCurrentUser());
+  }, [token, dispatch]);
 
   useEffect(() => {
     if (!isAuth) {
@@ -50,20 +61,19 @@ function App() {
               </PrivateRoute>
             }
           />
-           <Route
-              path="/courses/:courseId"
-              element={
-              <PrivateRoute>
-                  <CourseInfo />
-              </PrivateRoute>
-            }
-          />
-
           <Route
             path="/courses/add"
             element={
               <PrivateRoute>
-                <CreateCourse />
+                {!role ? null : isAdmin ? <CreateCourse /> : <Navigate to="/courses" replace />}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/courses/:courseId"
+            element={
+              <PrivateRoute>
+                <CourseInfo />
               </PrivateRoute>
             }
           />

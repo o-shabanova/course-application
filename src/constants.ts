@@ -23,4 +23,9 @@ export const ENDPOINTS = {
     COURSES: 'courses',
     LOGIN: 'login',
     REGISTER: 'register',
+    USERS_ME: 'users/me',
+} as const;
+
+export const USER_ROLE = {
+    ADMIN: 'admin',
 } as const;

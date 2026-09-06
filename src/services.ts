@@ -114,3 +114,38 @@ export async function getCourses<T = unknown>() {
 export async function getAuthors<T = unknown>() {
     return getAllData<T>(ENDPOINTS.AUTHORS);
 }
+
+export type CurrentUser = {
+    name: string;
+    email: string;
+    role: string;
+};
+
+type CurrentUserApiResponse = {
+    successful: boolean;
+    result?: {
+        name?: string;
+        email?: string;
+        role?: string;
+    };
+};
+
+export async function getCurrentUser(token: string): Promise<CurrentUser> {
+    const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.USERS_ME}`, {
+        headers: {
+            Authorization: token,
+        },
+    });
+
+    const data: CurrentUserApiResponse = await response.json();
+
+    if (!response.ok || !data.successful || !data.result) {
+        throw new Error('Failed to fetch current user');
+    }
+
+    return {
+        name: data.result.name || '',
+        email: data.result.email || '',
+        role: data.result.role || '',
+    };
+}

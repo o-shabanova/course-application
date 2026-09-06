@@ -14,6 +14,12 @@ export type LoginPayload = {
     token: string;
 };
 
+export type CurrentUserPayload = {
+    name: string;
+    email: string;
+    role: string;
+};
+
 export const getUser = () => {
     const userInitialState: UserState = { 
         isAuth: false, 
@@ -27,8 +33,15 @@ export const getUser = () => {
         const token = localStorage.getItem('token') ?? '';
         const user = localStorage.getItem('user') ?? '';
 
-        if (!token || !user) {
+        if (!token) {
             return userInitialState;
+        }
+
+        if (!user) {
+            return {
+                ...userInitialState,
+                token,
+            };
         }
 
         let name = "";
@@ -42,7 +55,7 @@ export const getUser = () => {
         }
 
         return {
-            isAuth: !!(token && name),
+            isAuth: !!token,
             name: name || "",
             email: email || "",
             token: token || "",
@@ -74,6 +87,19 @@ const userSlice = createSlice({
                 })
             );
         },
+        setCurrentUser(state, action: PayloadAction<CurrentUserPayload>) {
+            state.isAuth = true;
+            state.name = action.payload.name;
+            state.email = action.payload.email;
+            state.role = action.payload.role;
+            localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    name: action.payload.name,
+                    email: action.payload.email,
+                })
+            );
+        },
         logout(state) {
             state.isAuth = false;
             state.name = '';
@@ -86,7 +112,7 @@ const userSlice = createSlice({
     },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, setCurrentUser, logout } = userSlice.actions;
 export default userSlice.reducer;
 
 

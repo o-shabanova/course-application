@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
-import { BUTTON_TEXT } from '../../constants';
+import { BUTTON_TEXT, USER_ROLE } from '../../constants';
 import './Header.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,7 +13,9 @@ export const Header: React.FC = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   
-  const { name, isAuth } = useSelector((state: RootState) => state.user);
+  const { name, isAuth, role } = useSelector((state: RootState) => state.user);
+  const isAdmin = role.toLowerCase() === USER_ROLE.ADMIN;
+  const displayName = name || (isAdmin ? 'Admin' : '');
 
   const isAuthPage =
     location.pathname === '/login' ||
@@ -28,7 +30,7 @@ export const Header: React.FC = () => {
     <header className="header">
         <Logo/>
         {!isAuthPage && isAuth && (
-          <span className="user-name">{name}</span>
+          <span className="user-name">{displayName}</span>
         )}
 
         {!isAuthPage && isAuth && (
