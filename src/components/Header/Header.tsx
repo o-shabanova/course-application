@@ -30,16 +30,15 @@ export const Header: React.FC = () => {
     <header className="header">
         <Logo/>
         {!isAuthPage && isAuth && (
-          <span className="user-name">{displayName}</span>
-        )}
-
-        {!isAuthPage && isAuth && (
-          <Button 
-            buttonText={BUTTON_TEXT.LOGOUT} 
-            type="button" 
-            className="main-button login-button" 
-            onClick={handleLogout}
-          />
+          <>
+            <span className="user-name">{displayName}</span>
+            <Button 
+              buttonText={BUTTON_TEXT.LOGOUT} 
+              type="button" 
+              className="main-button login-button" 
+              onClick={handleLogout}
+            />
+          </>
         )}
     </header>
   );
