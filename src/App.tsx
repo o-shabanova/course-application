@@ -12,12 +12,10 @@ import { RootState, AppDispatch } from './store';
 import { loadCourses } from './store/courses/thunk';
 import { loadAuthors } from './store/authors/thunk';
 import { loadCurrentUser } from './store/user/thunk';
-import { isAdminRole } from './constants';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuth, token, role } = useSelector((state: RootState) => state.user);
-  const isAdmin = isAdminRole(role);
+  const { isAuth, token } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     if (!token) {
@@ -56,25 +54,21 @@ function App() {
           <Route
             path="/courses"
             element={
-              <PrivateRoute>
-                <Courses />
-              </PrivateRoute>
+              isAuth ? <Courses /> : <Navigate to="/login" replace />
             }
           />
           <Route
             path="/courses/add"
             element={
               <PrivateRoute>
-                {!role ? null : isAdmin ? <CreateCourse /> : <Navigate to="/courses" replace />}
+                <CreateCourse />
               </PrivateRoute>
             }
           />
           <Route
             path="/courses/:courseId"
             element={
-              <PrivateRoute>
-                <CourseInfo />
-              </PrivateRoute>
+              isAuth ? <CourseInfo /> : <Navigate to="/login" replace />
             }
           />
         </Routes>
