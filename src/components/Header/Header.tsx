@@ -5,13 +5,13 @@ import { BUTTON_TEXT, isAdminRole } from '../../constants';
 import './Header.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
-import { logout } from '../../store/user/userSlice';
+import { RootState, AppDispatch } from '../../store';
+import { logoutCurrentUser } from '../../store/user/thunk';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   
   const { name, isAuth, role } = useSelector((state: RootState) => state.user);
   const isAdmin = isAdminRole(role);
@@ -21,8 +21,8 @@ export const Header: React.FC = () => {
     location.pathname === '/login' ||
     location.pathname === '/registration';
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    await dispatch(logoutCurrentUser());
     navigate('/login');
   };
 

@@ -22,6 +22,7 @@ export const ENDPOINTS = {
     AUTHORS: 'authors',
     COURSES: 'courses',
     LOGIN: 'login',
+    LOGOUT: 'logout',
     REGISTER: 'register',
     USERS_ME: 'users/me',
 } as const;

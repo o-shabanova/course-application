@@ -130,6 +130,19 @@ type CurrentUserApiResponse = {
     };
 };
 
+export async function logoutUser(token: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.LOGOUT}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: token,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to logout');
+    }
+}
+
 export async function getCurrentUser(token: string): Promise<CurrentUser> {
     const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.USERS_ME}`, {
         headers: {
