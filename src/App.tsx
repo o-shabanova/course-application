@@ -12,12 +12,12 @@ import { RootState, AppDispatch } from './store';
 import { loadCourses } from './store/courses/thunk';
 import { loadAuthors } from './store/authors/thunk';
 import { loadCurrentUser } from './store/user/thunk';
-import { USER_ROLE } from './constants';
+import { isAdminRole } from './constants';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const { isAuth, token, role } = useSelector((state: RootState) => state.user);
-  const isAdmin = role.toLowerCase() === USER_ROLE.ADMIN;
+  const isAdmin = isAdminRole(role);
 
   useEffect(() => {
     if (!token) {

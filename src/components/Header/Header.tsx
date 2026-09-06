@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
-import { BUTTON_TEXT, USER_ROLE } from '../../constants';
+import { BUTTON_TEXT, isAdminRole } from '../../constants';
 import './Header.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,7 +14,7 @@ export const Header: React.FC = () => {
   const dispatch = useDispatch();
   
   const { name, isAuth, role } = useSelector((state: RootState) => state.user);
-  const isAdmin = role.toLowerCase() === USER_ROLE.ADMIN;
+  const isAdmin = isAdminRole(role);
   const displayName = name || (isAdmin ? 'Admin' : '');
 
   const isAuthPage =

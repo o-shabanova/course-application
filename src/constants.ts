@@ -29,3 +29,6 @@ export const ENDPOINTS = {
 export const USER_ROLE = {
     ADMIN: 'admin',
 } as const;
+
+export const isAdminRole = (role: string) =>
+    role.toLowerCase() === USER_ROLE.ADMIN;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import './Courses.css';
 import CourseCard from './components/CourseCard/CourseCard';
-import { BUTTON_TEXT, USER_ROLE } from '../../constants';
+import { BUTTON_TEXT, isAdminRole } from '../../constants';
 import Button from '../../common/Button/Button';
 import getAuthorsNames from '../../helpers/getAuthorsNames';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ const Courses: React.FC = () => {
   const courses = useSelector((state: RootState) => state.courses);
   const authors = useSelector((state: RootState) => state.authors);
   const role = useSelector((state: RootState) => state.user.role);
-  const isAdmin = role.toLowerCase() === USER_ROLE.ADMIN;
+  const isAdmin = isAdminRole(role);
 
   if (courses.length === 0) {
     return <EmptyCourseList />;

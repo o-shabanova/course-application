@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BUTTON_TEXT, USER_ROLE } from '../../constants';
+import { BUTTON_TEXT, isAdminRole } from '../../constants';
 import { Button } from '../../common/Button/Button';
 import './EmptyCourseList.css';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { RootState } from '../../store';
 
 const EmptyCourseList:React.FC = () => {
     const role = useSelector((state: RootState) => state.user.role);
-    const isAdmin = role.toLowerCase() === USER_ROLE.ADMIN;
+    const isAdmin = isAdminRole(role);
 
     return (
         <main className="empty-course-list">
