@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CurrentUser } from '../../services';
 
 export type UserState = {
     isAuth: boolean;
@@ -12,12 +13,6 @@ export type LoginPayload = {
     name: string;
     email: string;
     token: string;
-};
-
-export type CurrentUserPayload = {
-    name: string;
-    email: string;
-    role: string;
 };
 
 export const getUser = () => {
@@ -67,6 +62,16 @@ export const getUser = () => {
     }
 };
 
+const setUserToLocalStorage = (name: string, email: string) => {
+    localStorage.setItem(
+        "user",
+        JSON.stringify({
+            name,
+            email,
+        })
+    );
+};
+
 const initialState: UserState = getUser();
 
 const userSlice = createSlice({
@@ -79,26 +84,14 @@ const userSlice = createSlice({
             state.email = action.payload.email;
             state.token = action.payload.token;
             localStorage.setItem("token", action.payload.token);
-            localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    name: action.payload.name,
-                    email: action.payload.email,
-                })
-            );
+            setUserToLocalStorage(action.payload.name, action.payload.email);
         },
-        setCurrentUser(state, action: PayloadAction<CurrentUserPayload>) {
+        setCurrentUser(state, action: PayloadAction<CurrentUser>) {
             state.isAuth = true;
             state.name = action.payload.name;
             state.email = action.payload.email;
             state.role = action.payload.role;
-            localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    name: action.payload.name,
-                    email: action.payload.email,
-                })
-            );
+            setUserToLocalStorage(action.payload.name, action.payload.email);
         },
         logout(state) {
             state.isAuth = false;
