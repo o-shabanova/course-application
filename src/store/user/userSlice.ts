@@ -5,6 +5,7 @@ export type UserState = {
     name: string;
     email: string;
     token: string;
+    role: string;
 };
 
 export type LoginPayload = {
@@ -14,13 +15,20 @@ export type LoginPayload = {
 };
 
 export const getUser = () => {
-    const emptyUser = { isAuth: false, name: "", email: "", token: "" };
+    const userInitialState: UserState = { 
+        isAuth: false, 
+        name: "", 
+        email: "", 
+        token: "", 
+        role: "" 
+    };
+    
     try {
         const token = localStorage.getItem('token') ?? '';
         const user = localStorage.getItem('user') ?? '';
 
         if (!token || !user) {
-            return emptyUser;
+            return userInitialState;
         }
 
         let name = "";
@@ -38,10 +46,11 @@ export const getUser = () => {
             name: name || "",
             email: email || "",
             token: token || "",
+            role: "",
         };
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
-        return emptyUser;
+        return userInitialState;
     }
 };
 
@@ -70,6 +79,7 @@ const userSlice = createSlice({
             state.name = '';
             state.email = '';
             state.token = '';
+            state.role = '';
             localStorage.removeItem('token');
             localStorage.removeItem('user');
         },
