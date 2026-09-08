@@ -11,37 +11,45 @@ export type Course = {
   authors: string[];
 };
 
-export type CoursesState = Course[];
+export type CoursesState = {
+  list: Course[];
+  isLoading: boolean;
+};
 
-const initialState: CoursesState = [];
+const initialState: CoursesState = {
+  list: [],
+  isLoading: true,
+};
 
 const coursesSlice = createSlice({
   name: 'courses',
   initialState,
   reducers: {
-    setCourses(_state, action: PayloadAction<Course[]>) {
-      return Array.isArray(action.payload) ? action.payload : [];
+    setCoursesLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+    setCourses(state, action: PayloadAction<Course[]>) {
+      state.list = Array.isArray(action.payload) ? action.payload : [];
+      state.isLoading = false;
     },
     addCourse(state, action: PayloadAction<Course>) {
-      state.push(action.payload);
+      state.list.push(action.payload);
     },
     updateCourse(state, action: PayloadAction<Course>) {
-      const index = state.findIndex((course) => course.id === action.payload.id);
+      const index = state.list.findIndex((course) => course.id === action.payload.id);
       if (index !== -1) {
-        state[index] = action.payload;
+        state.list[index] = action.payload;
       }
     },
     deleteCourse(state, action: PayloadAction<string>) {
-      return state.filter((course) => course.id !== action.payload);
+      state.list = state.list.filter((course) => course.id !== action.payload);
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(logout, () => []);
+    builder.addCase(logout, () => initialState);
   },
 });
 
-export const { setCourses, addCourse, updateCourse, deleteCourse } = coursesSlice.actions;
+export const { setCoursesLoading, setCourses, addCourse, updateCourse, deleteCourse } = coursesSlice.actions;
 
 export default coursesSlice.reducer;
-
-

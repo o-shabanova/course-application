@@ -12,7 +12,7 @@ import './CourseInfo.css';
 
 const CourseInfo: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  const courses = useSelector((state: RootState) => state.courses);
+  const courses = useSelector((state: RootState) => state.courses.list);
   const authors = useSelector((state: RootState) => state.authors);
   
   if (!courseId || !courses) {

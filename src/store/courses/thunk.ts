@@ -1,14 +1,16 @@
 import { createCourse, CreateCoursePayload, deleteCourseById, getCourses, updateCourse as updateCourseRequest } from '../../services';
-import { addCourse, deleteCourse, setCourses, updateCourse, Course } from './coursesSlice';
+import { addCourse, deleteCourse, setCourses, setCoursesLoading, updateCourse, Course } from './coursesSlice';
 import type { AppDispatch, RootState } from '..';
 
 export const loadCourses = () => {
   return async (dispatch: AppDispatch) => {
+    dispatch(setCoursesLoading(true));
     try {
       const courses = await getCourses<Course>();
       dispatch(setCourses(courses));
     } catch (error) {
       console.error('Failed to fetch courses:', error);
+      dispatch(setCoursesLoading(false));
     }
   };
 };

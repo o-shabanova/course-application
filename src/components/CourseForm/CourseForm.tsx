@@ -31,7 +31,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
     const navigate = useNavigate();
     const { courseId } = useParams();
     const authorsFromStore = useSelector((state: RootState) => state.authors);
-    const courses = useSelector((state: RootState) => state.courses);
+    const courses = useSelector((state: RootState) => state.courses.list);
     const isUpdateMode = Boolean(courseId);
     const prefilledCourseIdRef = useRef<string | null>(null);
 

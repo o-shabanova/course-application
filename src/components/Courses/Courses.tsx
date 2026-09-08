@@ -11,10 +11,14 @@ import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import SearchBar from './components/SearchBar/SearchBar';
 
 const Courses: React.FC = () => {
-  const courses = useSelector((state: RootState) => state.courses);
+  const { list: courses, isLoading } = useSelector((state: RootState) => state.courses);
   const authors = useSelector((state: RootState) => state.authors);
   const role = useSelector((state: RootState) => state.user.role);
   const isAdmin = isAdminRole(role);
+
+  if (isLoading) {
+    return null;
+  }
 
   if (courses.length === 0) {
     return <EmptyCourseList />;
