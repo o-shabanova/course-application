@@ -1,5 +1,5 @@
-import { createCourse, CreateCoursePayload, deleteCourseById, getCourses } from '../../services';
-import { addCourse, deleteCourse, setCourses, Course } from './coursesSlice';
+import { createCourse, CreateCoursePayload, deleteCourseById, getCourses, updateCourse as updateCourseRequest } from '../../services';
+import { addCourse, deleteCourse, setCourses, updateCourse, Course } from './coursesSlice';
 import type { AppDispatch, RootState } from '..';
 
 export const loadCourses = () => {
@@ -36,6 +36,21 @@ export const createCourseThunk = (payload: CreateCoursePayload) => {
       return true;
     } catch (error) {
       console.error('Failed to create course:', error);
+      return false;
+    }
+  };
+};
+
+export const updateCourseThunk = (id: string, payload: CreateCoursePayload) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const token = getState().user.token || localStorage.getItem('token') || '';
+
+    try {
+      const course = await updateCourseRequest<Course>(id, payload, token);
+      dispatch(updateCourse(course));
+      return true;
+    } catch (error) {
+      console.error('Failed to update course:', error);
       return false;
     }
   };

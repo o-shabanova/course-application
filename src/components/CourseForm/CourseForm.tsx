@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './CourseForm.css';
 import Button from '../../common/Button/Button';
 import { BUTTON_TEXT } from '../../constants';
@@ -16,19 +16,24 @@ import getCourseDuration from '../../helpers/getCourseDuration';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { RootState, AppDispatch } from '../../store';
 import { Author, deleteAuthor } from '../../store/authors/authorsSlice';
-import { createCourseThunk } from '../../store/courses/thunk';
+import { Course } from '../../store/courses/coursesSlice';
+import { createCourseThunk, updateCourseThunk } from '../../store/courses/thunk';
 import { createAuthorThunk } from '../../store/authors/thunk';
 
-interface CreateCourseProps {
+interface CourseFormProps {
    onCancel?: () => void;
 }
 
-const CreateCourse: React.FC<CreateCourseProps> = ({
+const CourseForm: React.FC<CourseFormProps> = ({
     onCancel,
 }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const { courseId } = useParams();
     const authorsFromStore = useSelector((state: RootState) => state.authors);
+    const courses = useSelector((state: RootState) => state.courses);
+    const isUpdateMode = Boolean(courseId);
+    const prefilledCourseIdRef = useRef<string | null>(null);
 
     const [values, setValues] = useState({
         title: '',
@@ -56,6 +61,35 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
     const availableAuthors = authorsFromStore.filter(
         author => !courseAuthors.some(ca => ca.id === author.id)
     );
+
+    useEffect(() => {
+        if (!courseId) {
+            prefilledCourseIdRef.current = null;
+            return;
+        }
+
+        const course = courses.find((item: Course) => item.id === courseId);
+        if (!course || prefilledCourseIdRef.current === courseId) {
+            return;
+        }
+
+        const selectedAuthors = course.authors
+            .map((id) => authorsFromStore.find((author) => author.id === id))
+            .filter((author): author is Author => Boolean(author));
+
+        if (course.authors.length > 0 && authorsFromStore.length === 0) {
+            return;
+        }
+
+        setValues({
+            title: course.title,
+            description: course.description,
+            duration: String(course.duration),
+            authorName: '',
+        });
+        setCourseAuthors(selectedAuthors);
+        prefilledCourseIdRef.current = courseId;
+    }, [courseId, courses, authorsFromStore]);
 
     const [inputIds] = useState(() => ({
         title: generateId(),
@@ -191,14 +225,18 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             return;
         }
 
-        const isCreated = await dispatch(createCourseThunk({
+        const payload = {
             title: values.title.trim(),
             description: values.description.trim(),
             duration: Number(values.duration),
             authors: courseAuthors.map(author => author.id),
-        }));
+        };
 
-        if (isCreated) {
+        const isSaved = isUpdateMode && courseId
+            ? await dispatch(updateCourseThunk(courseId, payload))
+            : await dispatch(createCourseThunk(payload));
+
+        if (isSaved) {
             resetForm();
             navigate('/courses');
         }
@@ -304,7 +342,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
       </fieldset>
       <div className="create-course-buttons-container">
         <Button 
-        buttonText={BUTTON_TEXT.CREATE_COURSE} 
+        buttonText={isUpdateMode ? BUTTON_TEXT.UPDATE_COURSE : BUTTON_TEXT.CREATE_COURSE} 
         type="submit" 
         className="main-button create-course-button" 
         />
@@ -319,4 +357,4 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
   );
 };
 
-export default CreateCourse;
+export default CourseForm;

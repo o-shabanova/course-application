@@ -178,6 +178,29 @@ export async function createCourse<T>(payload: CreateCoursePayload, token: strin
     return postAuthenticatedJson<T>(ENDPOINTS.COURSES_ADD, payload, token);
 }
 
+export async function updateCourse<T>(
+    id: string,
+    payload: CreateCoursePayload,
+    token: string,
+): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.COURSES}/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+        },
+        body: JSON.stringify(payload),
+    });
+
+    const data: CreateApiResponse<T> = await response.json().catch(() => ({}));
+
+    if (!response.ok || data.successful === false || data.result === undefined) {
+        throw new Error('Failed to update course');
+    }
+
+    return data.result;
+}
+
 export async function createAuthor<T>(payload: CreateAuthorPayload, token: string): Promise<T> {
     return postAuthenticatedJson<T>(ENDPOINTS.AUTHORS_ADD, payload, token);
 }

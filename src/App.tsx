@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Header } from './components/Header/Header';
 import Courses from './components/Courses/Courses';
-import CreateCourse from './components/CourseForm/CourseForm';
+import CourseForm from './components/CourseForm/CourseForm';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -61,7 +61,7 @@ function App() {
             path="/courses/add"
             element={
               <PrivateRoute>
-                <CreateCourse />
+                <CourseForm />
               </PrivateRoute>
             }
           />
@@ -69,7 +69,7 @@ function App() {
             path="/courses/update/:courseId"
             element={
               <PrivateRoute>
-                <CreateCourse />
+                <CourseForm />
               </PrivateRoute>
             }
           />
