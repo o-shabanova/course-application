@@ -13,11 +13,11 @@ import { createTitleInputConfig,
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateTitle, validateDescription, validateDuration, validateAuthorName } from '../../helpers/validation';
 import getCourseDuration from '../../helpers/getCourseDuration';
-import getCurrentDate from '../../helpers/getCurrentDate';
 import AuthorItem from '../AuthorItem/AuthorItem';
 import { RootState, AppDispatch } from '../../store';
-import { addCourse, Course } from '../../store/courses/coursesSlice';
-import { addAuthor, Author, deleteAuthor } from '../../store/authors/authorsSlice';
+import { Author, deleteAuthor } from '../../store/authors/authorsSlice';
+import { createCourseThunk } from '../../store/courses/thunk';
+import { createAuthorThunk } from '../../store/authors/thunk';
 
 interface CreateCourseProps {
    onCancel?: () => void;
@@ -102,20 +102,22 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         setTouched({ ...touched, [fieldName]: false });
     };
 
-    const handleCreateAuthor = () => {
+    const handleCreateAuthor = async () => {
         const authorNameError = validateAuthorName(values.authorName);
-        if (!authorNameError && values.authorName.trim()) {
-            const newAuthor: Author = {
-                id: generateId(),
-                name: values.authorName.trim()
-            };
-            dispatch(addAuthor(newAuthor));
+        const trimmedName = values.authorName.trim();
+
+        if (authorNameError || !trimmedName) {
+            setTouched({ ...touched, authorName: true });
+            setErrors({ ...errors, authorName: authorNameError || 'Author Name is required' });
+            return;
+        }
+
+        const isCreated = await dispatch(createAuthorThunk(trimmedName));
+
+        if (isCreated) {
             setValues({ ...values, authorName: '' });
             setTouched({ ...touched, authorName: false });
             setErrors({ ...errors, authorName: '' });
-        } else {
-            setTouched({ ...touched, authorName: true });
-            setErrors({ ...errors, authorName: authorNameError || 'Author Name is required' });
         }
     };
 
@@ -164,7 +166,7 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
         navigate('/courses');
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         const titleError = validateTitle(values.title);
@@ -185,17 +187,18 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
             authorName: false,
         });
 
-        if (!titleError && !descriptionError && !durationError) {
-            const newCourse: Course = {
-                id: generateId(),
-                title: values.title.trim(),
-                description: values.description.trim(),
-                creationDate: getCurrentDate(),
-                duration: Number(values.duration),
-                authors: courseAuthors.map(author => author.id)
-            };
-            
-            dispatch(addCourse(newCourse));
+        if (titleError || descriptionError || durationError) {
+            return;
+        }
+
+        const isCreated = await dispatch(createCourseThunk({
+            title: values.title.trim(),
+            description: values.description.trim(),
+            duration: Number(values.duration),
+            authors: courseAuthors.map(author => author.id),
+        }));
+
+        if (isCreated) {
             resetForm();
             navigate('/courses');
         }
