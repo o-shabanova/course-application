@@ -135,6 +135,53 @@ export async function getAuthors<T = unknown>() {
     return getAllData<T>(ENDPOINTS.AUTHORS);
 }
 
+export type CreateCoursePayload = {
+    title: string;
+    description: string;
+    duration: number;
+    authors: string[];
+};
+
+export type CreateAuthorPayload = {
+    name: string;
+};
+
+type CreateApiResponse<T> = {
+    successful?: boolean;
+    result?: T;
+};
+
+async function postAuthenticatedJson<T>(
+    endpoint: string,
+    body: unknown,
+    token: string,
+): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+        },
+        body: JSON.stringify(body),
+    });
+
+    const data: CreateApiResponse<T> = await response.json().catch(() => ({}));
+
+    if (!response.ok || data.successful === false || data.result === undefined) {
+        throw new Error(`Failed to create ${endpoint}`);
+    }
+
+    return data.result;
+}
+
+export async function createCourse<T>(payload: CreateCoursePayload, token: string): Promise<T> {
+    return postAuthenticatedJson<T>(ENDPOINTS.COURSES_ADD, payload, token);
+}
+
+export async function createAuthor<T>(payload: CreateAuthorPayload, token: string): Promise<T> {
+    return postAuthenticatedJson<T>(ENDPOINTS.AUTHORS_ADD, payload, token);
+}
+
 export type CurrentUser = {
     name: string;
     email: string;

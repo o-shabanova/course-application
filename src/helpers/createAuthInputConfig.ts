@@ -80,7 +80,7 @@ export const createDescriptionInputConfig = (
     className: 'auth-input description-input',
     labelClassName: 'auth-label',
     labelText: 'Description',
-    type: 'text',
+    type: 'textarea',
     placeholderText: 'Input text',
     value,
     required: true

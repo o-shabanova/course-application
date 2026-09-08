@@ -74,7 +74,9 @@ const CreateCourse: React.FC<CreateCourseProps> = ({
 
     const onChange = handleFormChange(setValues);
 
-    const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDurationChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const numericValue = e.target.value.replace(/\D/g, '');
         setValues({ ...values, duration: numericValue });
     };

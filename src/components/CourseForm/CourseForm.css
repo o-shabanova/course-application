@@ -32,8 +32,9 @@
     margin-bottom: 24px;
 }
 
-.description-input input[type="text"] {
+.description-input textarea {
     height: 152px;
+    resize: none;
 }
 
 .duration-input-wrapper {

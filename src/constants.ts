@@ -20,7 +20,9 @@ export const API_BASE_URL = 'http://localhost:4000';
 
 export const ENDPOINTS = {
     AUTHORS: 'authors',
+    AUTHORS_ADD: 'authors/add',
     COURSES: 'courses',
+    COURSES_ADD: 'courses/add',
     LOGIN: 'login',
     LOGOUT: 'logout',
     REGISTER: 'register',

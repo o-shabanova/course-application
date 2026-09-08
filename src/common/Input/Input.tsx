@@ -4,11 +4,11 @@ import './Input.css';
 
 interface InputProps {
     labelText: string,
-    type: InputHTMLAttributes<HTMLInputElement>['type'],
+    type: InputHTMLAttributes<HTMLInputElement>['type'] | 'textarea',
     name: string,
     placeholderText: string,  
     value: string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
     required?: boolean,
     className?: string,
     labelClassName?: string,
@@ -19,6 +19,8 @@ interface InputProps {
 }
 
 export const Input: React.FC<InputProps> = (props) => {
+    const fieldClassName = `input ${props.hasError ? 'input-error' : ''}`;
+
     return (
     <div className={props.className}>
         <label 
@@ -27,17 +29,31 @@ export const Input: React.FC<InputProps> = (props) => {
         >
             {props.labelText}
         </label>
-        <input 
-        id={props.id}
-        name={props.name}
-        className={`input ${props.hasError ? 'input-error' : ''}`}
-        type={props.type} 
-        placeholder={props.placeholderText} 
-        value={props.value}
-        onChange={props.onChange} 
-        onFocus={props.onFocus}
-        onBlur={props.onBlur}
-        required={props.required}
-        />
+        {props.type === 'textarea' ? (
+            <textarea
+                id={props.id}
+                name={props.name}
+                className={fieldClassName}
+                placeholder={props.placeholderText}
+                value={props.value}
+                onChange={props.onChange}
+                onFocus={props.onFocus}
+                onBlur={props.onBlur}
+                required={props.required}
+            />
+        ) : (
+            <input 
+                id={props.id}
+                name={props.name}
+                className={fieldClassName}
+                type={props.type} 
+                placeholder={props.placeholderText} 
+                value={props.value}
+                onChange={props.onChange} 
+                onFocus={props.onFocus}
+                onBlur={props.onBlur}
+                required={props.required}
+            />
+        )}
     </div>
 )};
