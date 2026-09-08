@@ -1,5 +1,5 @@
-import { deleteCourseById, getCourses } from '../../services';
-import { deleteCourse, setCourses, Course } from './coursesSlice';
+import { createCourse, CreateCoursePayload, deleteCourseById, getCourses } from '../../services';
+import { addCourse, deleteCourse, setCourses, Course } from './coursesSlice';
 import type { AppDispatch, RootState } from '..';
 
 export const loadCourses = () => {
@@ -22,6 +22,21 @@ export const removeCourse = (id: string) => {
       dispatch(deleteCourse(id));
     } catch (error) {
       console.error('Failed to delete course:', error);
+    }
+  };
+};
+
+export const createCourseThunk = (payload: CreateCoursePayload) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const token = getState().user.token || localStorage.getItem('token') || '';
+
+    try {
+      const course = await createCourse<Course>(payload, token);
+      dispatch(addCourse(course));
+      return true;
+    } catch (error) {
+      console.error('Failed to create course:', error);
+      return false;
     }
   };
 };
