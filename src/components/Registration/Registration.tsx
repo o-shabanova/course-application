@@ -8,7 +8,7 @@ import generateId from '../../helpers/generateId';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateName, validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig, createNameInputConfig } from '../../helpers/createAuthInputConfig';
-import { registerUser, RegistrationError } from '../../services';
+import { registerUser } from '../../services';
 
 const Registration: React.FC = () => {
     const navigate = useNavigate();
@@ -96,17 +96,24 @@ const Registration: React.FC = () => {
           try {
             setLoading(true);
 
-            await registerUser(values);
-            navigate('/login');
-          } catch (err) {
-            if (err instanceof RegistrationError) {
-                setApiErrors(err.errors);
-            } else {
-                const message = err instanceof Error
-                    ? err.message
-                    : 'Network error. Please try again later.';
-                setApiErrors([message]);
+            const result = await registerUser(values);
+
+            if (result.ok) {
+                navigate('/login');
+                return;
             }
+
+            if (result.reason === 'validation') {
+                setApiErrors(result.errors);
+                return;
+            }
+
+            setApiErrors([result.message]);
+          } catch (err) {
+            const message = err instanceof Error
+                ? err.message
+                : 'Network error. Please try again later.';
+            setApiErrors([message]);
           } finally {
             setLoading(false);
           }

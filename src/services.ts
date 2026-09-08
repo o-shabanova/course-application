@@ -17,9 +17,10 @@ export type RegisterCredentials = {
     password: string;
 };
 
-export type RegisterResult = {
-    result: string;
-};
+export type RegisterResult =
+    | { ok: true; result: string }
+    | { ok: false; reason: 'validation'; errors: string[] }
+    | { ok: false; reason: 'failed'; message: string };
 
 type LoginApiResponse = {
     result: string;
@@ -35,15 +36,6 @@ type RegisterApiResponse = {
     result?: string;
     errors?: string[];
 };
-
-export class RegistrationError extends Error {
-    errors: string[];
-
-    constructor(errors: string[]) {
-        super(errors.join(', '));
-        this.errors = errors;
-    }
-}
 
 async function postJson<T>(endpoint: string, body: unknown): Promise<{ response: Response; data: T }> {
     const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
@@ -64,13 +56,13 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Re
 
     if (!response.ok || !data.successful) {
         if (!data.successful && Array.isArray(data.errors)) {
-            throw new RegistrationError(data.errors);
+            return { ok: false, reason: 'validation', errors: data.errors };
         }
 
-        throw new Error('Registration failed. Please try again.');
+        return { ok: false, reason: 'failed', message: 'Registration failed. Please try again.' };
     }
 
-    return { result: data.result ?? '' };
+    return { ok: true, result: data.result ?? '' };
 }
 
 export async function loginUser(credentials: LoginCredentials): Promise<LoginResult> {
