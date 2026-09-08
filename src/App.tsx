@@ -66,6 +66,14 @@ function App() {
             }
           />
           <Route
+            path="/courses/update/:courseId"
+            element={
+              <PrivateRoute>
+                <CreateCourse />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/courses/:courseId"
             element={
               isAuth ? <CourseInfo /> : <Navigate to="/login" replace />

@@ -1,13 +1,14 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './CourseCard.css';
 import Button from '../../../../common/Button/Button';
-import { BUTTON_TEXT } from '../../../../constants';
+import { BUTTON_TEXT, isAdminRole } from '../../../../constants';
 import formatCreationDate from '../../../../helpers/formatCreationDate';
 import getCourseDuration from '../../../../helpers/getCourseDuration';
 import { Link } from 'react-router-dom';
-import { AppDispatch } from '../../../../store';
-import { deleteCourse, Course } from '../../../../store/courses/coursesSlice';
+import { AppDispatch, RootState } from '../../../../store';
+import { Course } from '../../../../store/courses/coursesSlice';
+import { removeCourse } from '../../../../store/courses/thunk';
 
 interface CourseCardProps {
   course: Course;
@@ -16,13 +17,15 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames = '' }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const role = useSelector((state: RootState) => state.user.role);
+  const isAdmin = isAdminRole(role);
 
   if (!course) {
     return null;
   }
 
   const handleDelete = () => {
-    dispatch(deleteCourse(course.id));
+    dispatch(removeCourse(course.id));
   };
 
   const formattedCreationDate = formatCreationDate(course.creationDate);
@@ -47,19 +50,23 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, authorNames = '' }) => 
               />
             </Link>
           </div>
-          <div className="course-card-info-item">
-            <Button 
-              buttonText={BUTTON_TEXT.DELETE_COURSE}
-              type="button"
-              className="main-button course-card-button delete"
-              onClick={handleDelete}
-            />
-            <Button 
-              buttonText={BUTTON_TEXT.UPDATE_COURSE}
-              type="button"
-              className="main-button course-card-button update"
-            />
-          </div>
+          {isAdmin && (
+            <div className="course-card-info-item">
+              <Button
+                buttonText={BUTTON_TEXT.DELETE_COURSE}
+                type="button"
+                className="main-button course-card-button delete"
+                onClick={handleDelete}
+              />
+              <Link to={`/courses/update/${course.id}`}>
+                <Button
+                  buttonText={BUTTON_TEXT.UPDATE_COURSE}
+                  type="button"
+                  className="main-button course-card-button update"
+                />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </article>

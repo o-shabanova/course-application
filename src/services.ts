@@ -111,6 +111,26 @@ export async function getCourses<T = unknown>() {
     return getAllData<T>(ENDPOINTS.COURSES);
 }
 
+type DeleteCourseApiResponse = {
+    successful?: boolean;
+    result?: string;
+};
+
+export async function deleteCourseById(id: string, token: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.COURSES}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: token,
+        },
+    });
+
+    const data: DeleteCourseApiResponse = await response.json().catch(() => ({}));
+
+    if (!response.ok || data.successful === false) {
+        throw new Error('Failed to delete course');
+    }
+}
+
 export async function getAuthors<T = unknown>() {
     return getAllData<T>(ENDPOINTS.AUTHORS);
 }
