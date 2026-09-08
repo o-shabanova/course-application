@@ -11,8 +11,19 @@ export const loadCurrentUser = () => {
     }
 
     try {
-      const user = await getCurrentUser(token);
-      dispatch(setCurrentUser(user));
+      const result = await getCurrentUser(token);
+
+      if (result.ok) {
+        dispatch(setCurrentUser(result.user));
+        return;
+      }
+
+      if (result.reason === 'unauthorized') {
+        dispatch(logout());
+        return;
+      }
+
+      console.error('Failed to fetch current user');
     } catch (error) {
       console.error('Failed to fetch current user:', error);
     }

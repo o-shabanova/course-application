@@ -211,6 +211,12 @@ export type CurrentUser = {
     role: string;
 };
 
+export type CurrentUserResult =
+    | { ok: true; user: CurrentUser }
+    | { ok: false; reason: 'unauthorized' | 'failed' };
+
+const isUnauthorizedStatus = (status: number) => status === 401 || status === 403;
+
 type CurrentUserApiResponse = {
     successful: boolean;
     result?: {
@@ -233,22 +239,29 @@ export async function logoutUser(token: string): Promise<void> {
     }
 }
 
-export async function getCurrentUser(token: string): Promise<CurrentUser> {
+export async function getCurrentUser(token: string): Promise<CurrentUserResult> {
     const response = await fetch(`${API_BASE_URL}/${ENDPOINTS.USERS_ME}`, {
         headers: {
             Authorization: token,
         },
     });
 
+    if (isUnauthorizedStatus(response.status)) {
+        return { ok: false, reason: 'unauthorized' };
+    }
+
     const data: CurrentUserApiResponse = await response.json();
 
     if (!response.ok || !data.successful || !data.result) {
-        throw new Error('Failed to fetch current user');
+        return { ok: false, reason: 'failed' };
     }
 
     return {
-        name: data.result.name || '',
-        email: data.result.email || '',
-        role: data.result.role || '',
+        ok: true,
+        user: {
+            name: data.result.name || '',
+            email: data.result.email || '',
+            role: data.result.role || '',
+        },
     };
 }
