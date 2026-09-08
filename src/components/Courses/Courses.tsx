@@ -16,10 +16,6 @@ const Courses: React.FC = () => {
   const role = useSelector((state: RootState) => state.user.role);
   const isAdmin = isAdminRole(role);
 
-  if (!role) {
-    return null;
-  }
-
   if (courses.length === 0) {
     return <EmptyCourseList />;
   }

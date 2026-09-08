@@ -1,6 +1,34 @@
-import { getCurrentUser, logoutUser } from '../../services';
-import { setCurrentUser, logout } from './userSlice';
+import { getCurrentUser, LoginCredentials, loginUser, logoutUser } from '../../services';
+import { login, setCurrentUser, logout } from './userSlice';
 import type { AppDispatch, RootState } from '..';
+
+export const loginCurrentUser = (credentials: LoginCredentials) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const { token, name, email } = await loginUser(credentials);
+      const result = await getCurrentUser(token);
+
+      if (!result.ok) {
+        return { ok: false as const, message: 'Failed to fetch current user' };
+      }
+
+      dispatch(login({
+        name: result.user.name || name,
+        email: result.user.email || email,
+        token,
+        role: result.user.role,
+      }));
+
+      return { ok: true as const };
+    } catch (error) {
+      const message = error instanceof Error
+        ? error.message
+        : 'Network error. Please try again later.';
+
+      return { ok: false as const, message };
+    }
+  };
+};
 
 export const loadCurrentUser = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {

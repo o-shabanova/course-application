@@ -13,6 +13,7 @@ export type LoginPayload = {
     name: string;
     email: string;
     token: string;
+    role: string;
 };
 
 const userInitialState: UserState = {
@@ -41,10 +42,12 @@ export const getUser = () => {
 
         let name = "";
         let email = "";
+        let role = "";
         try {
             const userObject = JSON.parse(user);
             name = userObject.name;
             email = userObject.email;
+            role = userObject.role || "";
         } catch (e) {
             name = user;
         }
@@ -55,6 +58,7 @@ export const getUser = () => {
             name: name || "",
             email: email || "",
             token: token || "",
+            role: role || "",
         };
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
@@ -62,12 +66,13 @@ export const getUser = () => {
     }
 };
 
-const setUserToLocalStorage = (name: string, email: string) => {
+const setUserToLocalStorage = (name: string, email: string, role: string) => {
     localStorage.setItem(
         "user",
         JSON.stringify({
             name,
             email,
+            role,
         })
     );
 };
@@ -83,15 +88,16 @@ const userSlice = createSlice({
             state.name = action.payload.name;
             state.email = action.payload.email;
             state.token = action.payload.token;
+            state.role = action.payload.role;
             localStorage.setItem("token", action.payload.token);
-            setUserToLocalStorage(action.payload.name, action.payload.email);
+            setUserToLocalStorage(action.payload.name, action.payload.email, action.payload.role);
         },
         setCurrentUser(state, action: PayloadAction<CurrentUser>) {
             state.isAuth = true;
             state.name = action.payload.name;
             state.email = action.payload.email;
             state.role = action.payload.role;
-            setUserToLocalStorage(action.payload.name, action.payload.email);
+            setUserToLocalStorage(action.payload.name, action.payload.email, action.payload.role);
         },
         logout(state) {
             Object.assign(state, userInitialState);

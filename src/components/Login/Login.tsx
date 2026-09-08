@@ -9,13 +9,12 @@ import { BUTTON_TEXT } from '../../constants';
 import { handleFormChange } from '../../helpers/handleFormChange';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import { createEmailInputConfig, createPasswordInputConfig } from '../../helpers/createAuthInputConfig';
-import { loginUser } from '../../services';
-import { login } from '../../store/user/userSlice';
-import { RootState } from '@/store';
+import { loginCurrentUser } from '../../store/user/thunk';
+import { AppDispatch, RootState } from '@/store';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const isTokenExist = useSelector((state: RootState) => state.user.isAuth);
     useEffect(() => {
         if (isTokenExist) {
@@ -96,12 +95,15 @@ const Login: React.FC = () => {
           try {
             setLoading(true);
 
-            const { token, name, email } = await loginUser({
+            const result = await dispatch(loginCurrentUser({
                 email: values.email,
                 password: values.password,
-            });
+            }));
 
-            dispatch(login({ name, email, token }));
+            if (!result.ok) {
+                setApiErrors([result.message]);
+                return;
+            }
 
             setValues({ email: "", password: "" });
             setErrors({ email: "", password: "" });
